@@ -8,6 +8,7 @@ namespace DynamicProgrammingAlgorithms
 {
     class JobSequencingDeadline
     {
+        //List<KeyValuePair<DateTime, double>> DateTime stands for deadline and double for profit
         //Accepting all the jobs have 1 unit of work to finish
         //key corresponds to deadline and value to profit
         public KeyValuePair<KeyValuePair<string, string>, double>[] JobSequencingWithDeadlines(
