@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DynamicProgrammingAlgorithms
 {
-    class JobSequencingWithDeadlines
+    class JobSequencingDeadline
     {
         //Accepting all the jobs have 1 unit of work to finish
         //key corresponds to deadline and value to profit
