@@ -13,9 +13,9 @@ namespace DynamicProgrammingAlgorithms
         public KeyValuePair<KeyValuePair<string, string>, double>[] JobSequencingWithDeadlines(
             List<KeyValuePair<DateTime, double>> jobListWithDeadlines)
         {
-            //Jobs and their profit enlisted in descending order
+            //Jobs and their profit enlisted in descending order , on profit base
             List<KeyValuePair<DateTime, double>> tempList = jobListWithDeadlines.OrderByDescending(x => x.Value).ToList();
-            //Distinct datetime values are filtered
+            //Distinct datetime values are filtered out
             List<DateTime> deadLineList = jobListWithDeadlines.Select(x => x.Key.Date).Distinct().ToList();
             deadLineList.Insert(0, DateTime.UtcNow.Date);// today's date is added
             deadLineList.Sort(); // Datetime list sorted, values will be inserted according to this order
@@ -23,7 +23,7 @@ namespace DynamicProgrammingAlgorithms
             int count = 0;
             int sizeOfArray = deadLineList.Count - 1;
             int repeat = tempList.Count() - 1;
-            //Array for keeping desired values
+            //Array for keeping high profit values
             KeyValuePair<KeyValuePair<string, string>, double>[] deadLineSequence =
                 new KeyValuePair<KeyValuePair<string, string>, double>[sizeOfArray];
 
