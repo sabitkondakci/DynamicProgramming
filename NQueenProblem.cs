@@ -10,14 +10,6 @@ namespace DynamicProgrammingAlgorithms
     {
         private static int item = 1;
 
-        public void FullSolution(int[,] chestBoard)
-        {
-            if (SolveTheProblem(chestBoard) == false)
-            {
-                Console.Write("No solution");
-            }
-        }
-
         //Display method to print possible solutions
         private void Display(int[,] chestBoard)
         {
@@ -46,7 +38,7 @@ namespace DynamicProgrammingAlgorithms
             }
                 
 
-            // Check upper diagonal on left side 
+            // Check upper diagonal on LEFT side 
             for (int i = row, j = column; i >= 0 && j >= 0; i--, j--)
             {
                 if (chestBoard[i, j] == 1)
@@ -54,7 +46,7 @@ namespace DynamicProgrammingAlgorithms
             }
                 
 
-            // Check lower diagonal on left side 
+            // Check lower diagonal on LEFT side 
             for (int i = row, j = column; j >= 0 && i < chestBoard.GetLength(0); i++, j--)
             {
                 if (chestBoard[i, j] == 1)
@@ -69,7 +61,7 @@ namespace DynamicProgrammingAlgorithms
         {
             bool decision = false;
 
-            //if it reaches to last index of column ,Display and return true
+            //if it reaches to last index of column Display and return true
             if (column == chestBoard.GetLength(1))
             {
                 Display(chestBoard);
@@ -84,11 +76,14 @@ namespace DynamicProgrammingAlgorithms
                 {
                     // put the value in position 
                     chestBoard[r, column] = 1;
-                    
-                    // Make result true if any placement is possible                 
+
+                    // Make result true if any placement 
+                    // is possible 
                     decision = SolveTheProblem(chestBoard, column + 1) || decision;
 
-                    chestBoard[r, column] = 0; // Backtrack the method
+                    //this is placed in stack in every cycle, beware!
+                    //this is also called as backtracking
+                    chestBoard[r, column] = 0; 
                 }
             }
 
@@ -96,6 +91,5 @@ namespace DynamicProgrammingAlgorithms
             return decision;
         }
 
-        
     }
 }
