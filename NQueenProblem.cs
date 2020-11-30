@@ -12,7 +12,7 @@ namespace DynamicProgrammingAlgorithms
 
         public void FullSolution(int[,] chestBoard)
         {
-            if (SolveTheProblem(chestBoard, 0) == false)
+            if (SolveTheProblem(chestBoard) == false)
             {
                 Console.Write("No solution");
             }
