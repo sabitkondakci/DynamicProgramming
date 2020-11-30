@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,23 +8,54 @@ namespace DynamicProgrammingAlgorithms
 {
     class NQueenProblem
     {
-        // this method finds all possible solutions of NQueenProblem
-        public bool IsProper(int[,] chestBoard, int row, int column)
+        private static int item = 1;
+
+        public void FullSolution(int[,] chestBoard)
+        {
+            if (SolveTheProblem(chestBoard, 0) == false)
+            {
+                Console.Write("No solution");
+            }
+        }
+
+        //Display method to print possible solutions
+        private void Display(int[,] chestBoard)
+        {
+            Console.Write($"{item++}");
+            Console.WriteLine();
+            for (int i = 0; i < chestBoard.GetLength(0); i++)
+            {
+                for (int j = 0; j < chestBoard.GetLength(1); j++)
+                    Console.Write( $"{chestBoard[i, j]} ");
+
+                Console.Write("\n");
+            }
+
+            Console.WriteLine();
+        }
+
+        //Method checks the place , if it's proper for certain row and column then place it
+        private bool IsProper(int[,] chestBoard, int row, int column)
         {
             
+            // check the left side of this column
             for (int i = 0; i < column; i++)
             {
                 if (chestBoard[row, i] == 1)
                     return false;
             }
+                
 
-            for (int i= row ,j=column; i>=0 && j>=0;i--,j--)
+            // Check upper diagonal on left side 
+            for (int i = row, j = column; i >= 0 && j >= 0; i--, j--)
             {
                 if (chestBoard[i, j] == 1)
                     return false;
             }
+                
 
-            for (int i = row,j=column; j >= 0 && i < chestBoard.GetLength(0); i++, j--)
+            // Check lower diagonal on left side 
+            for (int i = row, j = column; j >= 0 && i < chestBoard.GetLength(0); i++, j--)
             {
                 if (chestBoard[i, j] == 1)
                     return false;
@@ -33,75 +64,38 @@ namespace DynamicProgrammingAlgorithms
             return true;
         }
 
-        //This method starts from 0. column by default and chestBoard is the designed array for chest board
-        public bool SolveTheProblem(int[,] chestBoard, int column=0 )
+        //A recursive function to solve the problem
+        private bool SolveTheProblem(int[,] chestBoard, int column=0)
         {
-            List<List<int>> solutionList=new List<List<int>>();
-            List<int> results=new List<int>();
-            // if column reaches to the end successfully, you're done
-            if (column >= chestBoard.GetLength(1))
-            {
-                foreach (var i in chestBoard)
-                {
-                   results.Add(i); 
-                }
-                
-                //Mirror image of matrix is also a possible solution
-                for (int i = 0; i < chestBoard.GetLength(0); i++)
-                {
-                    for (int j = 0; j <= i; j++)
-                    {
-                        chestBoard[i, j] = chestBoard[i, j] + chestBoard[j, i] 
-                                           - (chestBoard[j, i] = chestBoard[i, j]);
-                    }
-                }
-                
-                foreach (var k in chestBoard)
-                {
-                    results.Add(k);
-                }
+            bool decision = false;
 
-                solutionList.Add(results);
-                PrintToConsole(solutionList, chestBoard.GetLength(0));
+            //if it reaches to last index of column ,Display and return true
+            if (column == chestBoard.GetLength(1))
+            {
+                Display(chestBoard);
                 return true;
             }
-            
-            //increase the row number , till it recurses
-            for (int i = 0; i < chestBoard.GetLength(0); i++)
-            {
-                //check all diagonal lines , upper rows 
-                if (IsProper(chestBoard, i, column))
-                {
-                    // if there is no problem , simply place it
-                    chestBoard[i, column] = 1;
-                    // recursion for next column
-                    if (SolveTheProblem(chestBoard, column+1))
-                        return true;
 
-                    chestBoard[i, column] = 0; // this is backtracking
+
+            for (int r = 0; r < chestBoard.GetLength(0); r++)
+            {
+               
+                if (IsProper(chestBoard, r, column))
+                {
+                    // put the value in position 
+                    chestBoard[r, column] = 1;
+                    
+                    // Make result true if any placement is possible                 
+                    decision = SolveTheProblem(chestBoard, column + 1) || decision;
+
+                    chestBoard[r, column] = 0; // Backtrack the method
                 }
             }
 
-            return false;
+            //If queen can not be placed in any row in this column then return false 
+            return decision;
         }
-        private void PrintToConsole(List<List<int>> fullList,int N)
-        {
-            int count = 0;
 
-            foreach (var items in fullList)
-            {
-                foreach (var element in items)
-                {
-                    Console.Write(element + " ");
-                    count++;
-                    if (count % N == 0)
-                        Console.WriteLine();
-
-                    if (count % (N*N) == 0)
-                        Console.WriteLine();
-                }
-
-            }
-        }
+        
     }
 }
