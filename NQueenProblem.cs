@@ -8,7 +8,15 @@ namespace DynamicProgrammingAlgorithms
 {
     class NQueenProblem
     {
-        private static int item = 1;
+        private int item = 1;
+
+        public void FullSolution(int[,] chestBoard)
+        {
+            if (SolveTheProblem(chestBoard) == false)
+            {
+                Console.Write("No solution");
+            }
+        }
 
         //Display method to print possible solutions
         private void Display(int[,] chestBoard)
@@ -38,7 +46,7 @@ namespace DynamicProgrammingAlgorithms
             }
                 
 
-            // Check upper diagonal on LEFT side 
+            // Check upper diagonal on left side 
             for (int i = row, j = column; i >= 0 && j >= 0; i--, j--)
             {
                 if (chestBoard[i, j] == 1)
@@ -46,7 +54,7 @@ namespace DynamicProgrammingAlgorithms
             }
                 
 
-            // Check lower diagonal on LEFT side 
+            // Check lower diagonal on left side 
             for (int i = row, j = column; j >= 0 && i < chestBoard.GetLength(0); i++, j--)
             {
                 if (chestBoard[i, j] == 1)
@@ -75,10 +83,9 @@ namespace DynamicProgrammingAlgorithms
                 if (IsProper(chestBoard, r, column))
                 {
                     // put the value in position 
-                    chestBoard[r, column] = 1;
-
-                    // Make result true if any placement 
-                    // is possible 
+                    chestBoard[r, column] = 1;               
+                   
+                    //decision , retruns true or false
                     decision = SolveTheProblem(chestBoard, column + 1) || decision;
 
                     //this is placed in stack in every cycle, beware!
