@@ -124,6 +124,7 @@ namespace DynamicProgrammingAlgorithms
 
                     //this is placed in stack in every cycle, beware!
                     //this is also called as backtracking
+                    //if column+1 can't reach to the value of N , 0 is placed back in place of 1
                     chestBoard[r, column] = 0; 
                 }
             }
@@ -186,7 +187,6 @@ namespace DynamicProgrammingAlgorithms
                 return true;
             }
 
-
             for (int r = 0; r < N; r++)
             {
 
@@ -244,6 +244,7 @@ namespace DynamicProgrammingAlgorithms
                 {
                     for (int j = 0; j < N; j++)
                     {
+                        //if one element pops up as different, outCheck is true , break the loop
                         if (arr[i, j] == firstDiagonal[i, j])
                             outCheck = false;
                         else
@@ -252,10 +253,11 @@ namespace DynamicProgrammingAlgorithms
                             break;
                         }
                     }
-
+                    //if loop is cut off by break it will come out as true, so that get out of second inner loop
                     if (outCheck) break;
                 }
-
+                //if all elements are similar then outCheck gets false, which means there is a similar object in list
+                //so that get out of foreach loop, we are done
                 if (!outCheck) break;
             }
             //if first foreach traverse returns true , it means that there is no similar matrix in current list 
