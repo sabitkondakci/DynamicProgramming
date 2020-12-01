@@ -30,8 +30,7 @@ namespace DynamicProgrammingAlgorithms
             checkList =new List<int[,]>();
         }
         
-        //Fundemantal Solutions, it returns double amount of desired result 
-        //the reason that it doesn't include first and second reflections for every rotation
+        //Fundemantal Solutions, where rotational and diagonal similarities are excluded       
         public void FundamentalSolution(int[,] chestBoard)
         {
             if (FundamentalSolveTheProblem(chestBoard) == false)
@@ -134,9 +133,8 @@ namespace DynamicProgrammingAlgorithms
         }
 
         //this method shows fundamental solutions of NQueen problem
-        //fundemantal solution excludes rotations if they are somehow alike
-        //this method does't inclue diagonal reflections fro every rotation
-        //includes norotational reflexions
+        //fundemantal solution excludes rotations if they are somehow alike      
+        //includes rotational reflexions
         private bool FundamentalSolveTheProblem(int[,] chestBoard, int column = 0)
         {
            
@@ -286,6 +284,7 @@ namespace DynamicProgrammingAlgorithms
                 }
             }
 
+            //check similarities after diagonal reflection of rotations
             if (outCheck)
             {
                 foreach (var arr in checkList)
@@ -309,7 +308,31 @@ namespace DynamicProgrammingAlgorithms
                     if (!outCheck) break;
                 }
             }
+            FirstDiagonalReflectionSwap(Rotation90);
+            if (outCheck)
+            {
+                foreach (var arr in checkList)
+                {
+                    for (int i = 0; i < N; i++)
+                    {
+                        for (int j = 0; j < N; j++)
+                        {
+                            if (arr[i, j] == Rotation90[i, j])
+                                outCheck = false;
+                            else
+                            {
+                                outCheck = true;
+                                break;
+                            }
+                        }
 
+                        if (outCheck) break;
+                    }
+
+                    if (!outCheck) break;
+                }
+            }
+           
             if (outCheck)
             {
                 foreach (var arr in checkList)
@@ -333,7 +356,55 @@ namespace DynamicProgrammingAlgorithms
                     if (!outCheck) break;
                 }
             }
+            FirstDiagonalReflectionSwap(Rotation180);
+            if (outCheck)
+            {
+                foreach (var arr in checkList)
+                {
+                    for (int i = 0; i < N; i++)
+                    {
+                        for (int j = 0; j < N; j++)
+                        {
+                            if (arr[i, j] == Rotation180[i, j])
+                                outCheck = false;
+                            else
+                            {
+                                outCheck = true;
+                                break;
+                            }
+                        }
 
+                        if (outCheck) break;
+                    }
+
+                    if (!outCheck) break;
+                }
+            }
+            
+            if (outCheck)
+            {
+                foreach (var arr in checkList)
+                {
+                    for (int i = 0; i < N; i++)
+                    {
+                        for (int j = 0; j < N; j++)
+                        {
+                            if (arr[i, j] == Rotation270[i, j])
+                                outCheck = false;
+                            else
+                            {
+                                outCheck = true;
+                                break;
+                            }
+                        }
+
+                        if (outCheck) break;
+                    }
+
+                    if (!outCheck) break;
+                }
+            }
+            FirstDiagonalReflectionSwap(Rotation270);
             if (outCheck)
             {
                 foreach (var arr in checkList)
