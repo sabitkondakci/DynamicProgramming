@@ -30,7 +30,10 @@ namespace DynamicProgrammingAlgorithms
             checkList =new List<int[,]>();
         }
         
-        //Fundemantal Solutions, where rotational and diagonal similarities are excluded       
+        //Fundemantal Solutions, it returns double amount of desired result 
+        //the reason that it doesn't include first and second reflections for every rotation
+        //for rotational reflexions it's made by firstDiagonal refection, it can be done by second 
+        //diagonal either
         public void FundamentalSolution(int[,] chestBoard)
         {
             if (FundamentalSolveTheProblem(chestBoard) == false)
@@ -38,6 +41,7 @@ namespace DynamicProgrammingAlgorithms
                 Console.Write("No solution");
             }
             checkList.Clear();
+            item = 1;
         }
 
         public void FullSolution(int[,] chestBoard)
@@ -46,6 +50,8 @@ namespace DynamicProgrammingAlgorithms
             {
                 Console.Write("No solution");
             }
+
+            item = 1;
         }
 
         //Display method to print possible solutions
@@ -133,8 +139,9 @@ namespace DynamicProgrammingAlgorithms
         }
 
         //this method shows fundamental solutions of NQueen problem
-        //fundemantal solution excludes rotations if they are somehow alike      
-        //includes rotational reflexions
+        //fundemantal solution excludes rotations if they are somehow alike
+        //this method does't inclue diagonal reflections fro every rotation
+        //includes norotational reflexions
         private bool FundamentalSolveTheProblem(int[,] chestBoard, int column = 0)
         {
            
