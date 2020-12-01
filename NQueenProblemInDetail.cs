@@ -206,6 +206,7 @@ namespace DynamicProgrammingAlgorithms
             //If queen can not be placed in any row in this column then return false 
             return decision;
         }
+        
         private void FirstDiagonalReflectionSwap(int[,] chestBoard)
         {
             int N = chestBoard.GetLength(0);
@@ -219,6 +220,7 @@ namespace DynamicProgrammingAlgorithms
                 }
             }
         }
+        
         private void SecondDiagonalReflectionSwap(int[,] chestBoard)
         {
             int N = chestBoard.GetLength(0);
@@ -233,6 +235,7 @@ namespace DynamicProgrammingAlgorithms
                 }
             }
         }
+        
         private bool OutCheck(int N, bool outCheck)
         {
             // checking the firstDiogonal, if there is one it returns false so that no need for extra availablity check
@@ -256,6 +259,7 @@ namespace DynamicProgrammingAlgorithms
 
                 if (!outCheck) break;
             }
+            
             //if first foreach traverse returns true , it means that there is no similar matrix in current list 
             //so that check for others, -secondDiagonal and rotations-
             if (outCheck)
@@ -356,6 +360,7 @@ namespace DynamicProgrammingAlgorithms
 
             return outCheck;
         }
+        
         //Clockwise Rotation!
         private void RotateMatrix90(int N, int[,] rotation)
         {
@@ -385,16 +390,19 @@ namespace DynamicProgrammingAlgorithms
                 }
             }
         }
+        
         private void RotateMatrix180(int N, int[,] rotation)
         {
             RotateMatrix90(N,rotation);
             RotateMatrix90(N,rotation);
         }
+        
         private void RotateMatrix270(int N, int[,] rotation)
         {
             RotateMatrix90(N, rotation);
             RotateMatrix90(N, rotation);
             RotateMatrix90(N, rotation);
         }
+        
     }
 }
