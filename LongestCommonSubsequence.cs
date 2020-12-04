@@ -44,8 +44,7 @@ namespace DynamicProgrammingAlgorithms
                 else
                 {
                     //mapTable is traversed from last to first so that insertion method is used
-                    longestPattern.Insert(0,strPattern[l]);
-                    l--;
+                    longestPattern.Insert(0,strPattern[l--]);               
                     k--;
                 }
                     
