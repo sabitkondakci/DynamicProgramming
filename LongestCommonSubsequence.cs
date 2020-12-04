@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,8 +9,14 @@ namespace DynamicProgrammingAlgorithms
     class LongestCommonSubsequence
     {
         //the method has O(m.n) time complexity
-        public string LongestSubsequence(string pattern, string strSample)
+        public string LongestSubsequence(string pattern, string strSample,bool caseInsensitive=false)
         {
+            if (caseInsensitive)
+            {
+                pattern = pattern.ToLower();
+                strSample = strSample.ToLower();
+            }
+
             StringBuilder longestPattern=new StringBuilder();
             List<char> charPattern = pattern.ToList();
             List<char> strPattern = strSample.ToList();
@@ -44,7 +50,7 @@ namespace DynamicProgrammingAlgorithms
                 else
                 {
                     //mapTable is traversed from last to first so that insertion method is used
-                    longestPattern.Insert(0,strPattern[l--]);               
+                    longestPattern.Insert(0,strPattern[l--]);
                     k--;
                 }
                     
