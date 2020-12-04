@@ -11,10 +11,10 @@ namespace DynamicProgrammingAlgorithms
     class KnuthMorrisPratAlgorithm
     {
         //this is a form of pattern matching algorithm
-        public bool StringPatternMatchController(string pattern, StringBuilder sampleString,bool caseSensitive=false)
+        public bool StringPatternMatchController(string pattern, StringBuilder sampleString,bool caseInsensitive=false)
         {
-            // if case sensitive search is desired or not
-            if (caseSensitive)
+            // if case insensitive search is desired or not
+            if (caseInsensitive)
             {
                 pattern = pattern.ToLower();
                 sampleString = sampleString.Replace(sampleString.ToString(),sampleString.ToString().ToLower());
