@@ -30,7 +30,7 @@ namespace DynamicProgrammingAlgorithms
             {
                 for (int j = 1; j < strPattern.Count; j++)
                 {
-                    //if elment at pattern matches add 1 to mapTable[i-1,j-1]
+                    //if element at charPattern matches, add 1 to mapTable[i-1,j-1]
                     if (charPattern[i] == strPattern[j])
                         mapTable[i, j] = 1 + mapTable[i - 1, j - 1];
                     else
@@ -43,13 +43,13 @@ namespace DynamicProgrammingAlgorithms
             //k :row counter , l:column counter
             while (k>0 && l>0)
             {
-                //traverse the mapTable , form last to begining
+                //traverse the mapTable , form end to first
                 //if previous column is similar to current then decrease column counter "l"
                 if (mapTable[k, l] == mapTable[k, l - 1])
                     l--;
                 else
                 {
-                    //mapTable is traversed from last to first so that insertion method is used
+                    //mapTable is traversed from end to first so that insertion method is used
                     longestPattern.Insert(0,strPattern[l--]);
                     k--;
                 }
