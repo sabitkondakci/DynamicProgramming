@@ -25,7 +25,7 @@ namespace DynamicProgrammingAlgorithms
                 //if i+N reaches the max limit then break the loop, it simlpy means there is no match
                 if (i + N > sampleString.Length)
                     break;
-                //compare hash codes of subsitrings which are size of N 
+                //compare hash codes of substrings which are size of N 
                 if (pattern.GetHashCode() == sampleString.ToString().Substring(i, N).GetHashCode())
                     return true;
             }
