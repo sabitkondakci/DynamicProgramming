@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +37,10 @@ namespace DynamicProgrammingAlgorithms
             {
                 if (indexPatternChars.Contains(patternChar[i]))
                 {
+                    // for a pattern of       [a,b,a,b,c]
+                    // indexPatternChars => [ ,a,b,a,b,c]
+                    // storedIndexes     => [0,0,0,1,2,0]
+                    
                     int lastIndex = indexPatternChars.LastIndexOf(patternChar[i]);
                     //the key part! take the lastIndex of repating char into consideration.
                     storedIndexes[i+1] = lastIndex;
