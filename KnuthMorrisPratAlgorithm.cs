@@ -57,7 +57,7 @@ namespace DynamicProgrammingAlgorithms
                 //if chars are similar then j++ and k++
                 if (sampleString[k] == indexPatternChars[j+1])
                 {
-                    //whether storedIndexes.Length or indexPatternChars.
+                    //whether storedIndexes.Length or indexPatternChars.Count
                     //they're same
                     if (j + 1 == indexPatternChars.Count - 1)
                         return true;
