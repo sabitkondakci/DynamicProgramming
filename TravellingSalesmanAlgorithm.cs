@@ -61,7 +61,7 @@ namespace GraphTheoryInDetail
         }
 
         // Solves the traveling salesman problem and caches solution.
-        public void Solve()
+        private void Solve()
         {
 
             if (ranSolver) return;
@@ -160,7 +160,7 @@ namespace GraphTheoryInDetail
 
         // This method generates all bit sets of size n where r bits
         // are set to one. The result is returned as a list of integer masks.
-        public List<int> Combinations(int r, int n)
+        private List<int> Combinations(int r, int n)
         {
             List<int> subsets = new List<int>();
             Combinations(0, 0, r, n, subsets);
