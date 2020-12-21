@@ -1,20 +1,33 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GraphTheoryInDetail
-{
+{ 
     /*
- * An implementation of the traveling salesman problem in C# using dynamic programming to improve
- * the time complexity from O(n!) to O(n^2 * 2^n).
- *
- * Time Complexity: O(n^2 * 2^n) Space Complexity: O(n * 2^n)
- *
- * The main source code in Java belongs to William Fiset
- * Repository Origin :https://github.com/williamfiset/Algorithms/blob/master/src/main/java/com/williamfiset/algorithms/graphtheory/TspDynamicProgrammingIterative.java
- */
+        An implementation of the traveling salesman problem in C# using dynamic programming to improve
+        the time complexity from O(n!) to O(n^2 * 2^n).
+ 
+        Time Complexity: O(n^2 * 2^n) Space Complexity: O(n * 2^n)
+ 
+        The main source code in Java belongs to William Fiset
+        Repository Origin :https://github.com/williamfiset/Algorithms/blob/master/src/main/java/com/williamfiset/algorithms/graphtheory/TspDynamicProgrammingIterative.java
+    */
+
+    /*
+     * Before starting off,
+     * be sure that all element of your matrix is of double.PositiveInfinity;
+     *
+     * for (int i = 0; i < 6; i++)
+            {
+                for (int j = 0; j < 6; j++)
+                {
+                    distanceMatrix[i, j] = double.PositiveInfinity;
+                }
+            }
+     */
     public class TravelingSalesmanProblem
     {
         private int N, start;
