@@ -7,7 +7,7 @@ using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AlbahariComTests
+namespace ParallelAggregation
 {
     class Program
     {
