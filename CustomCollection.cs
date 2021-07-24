@@ -80,7 +80,13 @@
             }
             
             public readonly T this[int index] =>  _array[index];
-        }
+         }
+        
+         LoopInForEach list = new();
+         foreach (var item in list)
+         {
+             Console.WriteLine(item); // valid
+         }
         
          var refCheck = new int[] { 1, 2, 3 };
          IReadOnlyArray<int> readOnlyArray = (ReadOnlyArray<int>) refCheck; // valid
