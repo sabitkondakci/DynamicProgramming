@@ -60,8 +60,6 @@
                 // extra disposing!
             }
 
-#nullable disable
-
             object IEnumerator.Current => Current;
 
             public T Current
