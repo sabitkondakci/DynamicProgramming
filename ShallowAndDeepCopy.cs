@@ -12,7 +12,7 @@ namespace ShallowDeepCopy
     {
         static void Main(string[] args)
         {
-            SSNGenerator ssnGenerator = new(new Random());
+            SSNGenerator ssnGenerator = new(new Random()); // Social Security Number
             //var a = BenchmarkRunner.Run<SSNBenchmark>();
             Staff hrStaff = new(new QuickInfo("Jessy", "Herolt"),
             new DetailedInfo(Guid.NewGuid(),
@@ -26,7 +26,8 @@ namespace ShallowDeepCopy
             Staff deepCopy = hrStaff.DeepCopy();
 
             Print(hrStaff,"Original");
-
+            
+            // alter the values in hrStaff , DummyData is the only primitive type in Staff class
             hrStaff.QuickInformation.FirstName = "Dalton";
             hrStaff.QuickInformation.LastName = "Mayer";
             hrStaff.DummyData = "DummyData changed";
@@ -38,9 +39,7 @@ namespace ShallowDeepCopy
 
             Print(shallowCopy, "Shallow Copy");
             Print(deepCopy, "Deep Copy");
-
-
-            Console.Read();
+ 
 
             static void Print(Staff hrStaff,string copyType)
             {
@@ -131,14 +130,16 @@ namespace ShallowDeepCopy
         public QuickInfo QuickInformation{ get; set; }
         public DetailedInfo DetailedInformation { get; set; }
         public string DummyData { get; set; }
+        
         public Staff ShallowCopy()
         {               
             return MemberwiseClone() as Staff;
         }
+        
         public Staff DeepCopy()
         {
             var deepCopy = this.MemberwiseClone() as Staff;
-            deepCopy.DetailedInformation = this.DetailedInformation.ShallowCopy();
+            deepCopy.DetailedInformation = this.DetailedInformation.ShallowCopy(); 
             deepCopy.QuickInformation = this.QuickInformation.ShallowCopy();          
             return deepCopy;
         }
