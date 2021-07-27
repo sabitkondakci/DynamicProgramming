@@ -12,8 +12,10 @@ namespace ShallowDeepCopy
     {
         static void Main(string[] args)
         {
-            SSNGenerator ssnGenerator = new(new Random()); // Social Security Number
-            //var a = BenchmarkRunner.Run<SSNBenchmark>();
+            // Random Social Security Number Generator, which returns a tuple (int threeDigits, int twoDigits,int fourDigits)
+            // xxx-xx-xxxx format
+            SSNGenerator ssnGenerator = new(new Random()); 
+            
             Staff hrStaff = new(new QuickInfo("Jessy", "Herolt"),
             new DetailedInfo(Guid.NewGuid(),
                             "0001-89938749928-388293",
