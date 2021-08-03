@@ -10,7 +10,7 @@ class NotTooSafeStringReverse
     
     public static void Main()
     {
-        var a = BenchmarkRunner.Run<ReverseBench>();     
+        var a = BenchmarkRunner.Run<ReverseBench>();      
     }
 
     public static string GetLargeString()
@@ -18,7 +18,7 @@ class NotTooSafeStringReverse
         string insanOlmak = "Bu  konularda  kafa  yoran  ve  bir  türlü  taşı  yerine  oturtamayan  arkadaşlarla  zaman,  zaman  “neden”  diye  tartışıp,  fikir  teatisinde  bulunuruz.. Ne yazık ki,  sonuçta  konu hüsranla kapanır  çoğunlukla..  Çünkü  toplumun  büyük  bir  kesiminde  dostlukları, iyilikleri, güzellikleri,  hizmetleri  unutma  ya  hastalık  olmuş,  ya da  işlerine  geliyor,  kararına  varırız..     Maneviyata  dönmek  isteriz.. Ama  nerde.. Aramak  faydasız.. Manevi  değerler  dünyamıza  gözümüzü  kapattığımız  ölçüde  vefadan, minnet  duygusundan,  kadirbilir  olmaktan  kopup  uzaklaşılmış  olduğunu  görürüz.. Anlarız ki,  insanlık  için  önce  insan  olmak  gerekir..              Aslında  bize  şöyle  öğretmişti  atalarımız.. “Aman  haaa, bir  fincan  kahvenin  kırk  yıl  hatırı  vardır”.. “Komşu  komşunun  külüne  muhtaçtır,  iyi  geçinin  çevrenizdekilerle, sayın, sevin” derlerdi..Hatta  bizlerin  beyinlerine  kazınacağına inandıkları  hikayelerle  nasihatte  bulunurlardı.. Demek  gerçekten  başarılı  olmuşlar,  nasıl  hayatımda  beklentisiz  hizmet  aşkı  coşkusu  hiç  eksilmediyse, her  şeye  rağmen  anlatılan  hikayeler de  unutulmadı  şükürler  olsun.. Hem de  tüm  etkisiyle  beynimde  koruyor yerini.. Mesela  bakın  bir  tanesi  şöyleydi  ve  bu  hikayenin  insan  üstüne  hassasiyetini  şimdi  çok  daha  iyi  anlıyorum.Küçük bir  kız çocuğu  çimenlerin üzerinde  yürürken bir  kelebeğin dikene  takılıp kalmış  olduğunu görür..Hemen  koşar ve  çok dikkatli  bir şekilde  kelebeği dikenden  kurtarır..Kelebek  sevinçle uçmaya  başlar..Ve  az sonra  çok güzel  ve iyi  kalpli bir  peri olarak  geri döner..Küçük  kıza “Güzel kız, bu  iyiliğine karşı  bende sana  en çok  istediğin şeyi  vermek istiyorum” der..Küçük  kız bir  an düşünür  ve cevap  verir “Hayat boyu  mutlu olmak  istiyorum” Onun üzerine  peri ona  doğru eğilir  ve kulağına  bir şeyler  fısıldar..Ardından  birden bire  gözden kaybolur..Kız  büyür..Çevresindeki  hiç kimse  ondan daha  mutlu değildir..Bu  mutluluğun sırrını  ona her  sorduklarında yalnızca  gülümser ve  “iyi bir  perinin sözünü  dinledim”  der..Seneler  geçer ve  bu mutlu  yaşlının sırrının  onunla birlikte  öleceğinden korkan  komşuları “Lütfen bu  sırrı artık  bize de  söyle”  diye yalvarırlar. “Perinin sana  ne ";
         string largeString = string.Empty;      
 
-        for (int i = 0; i < 30; i++)
+        for (int i = 0; i < 15; i++)
         {
             largeString += insanOlmak;
         }
@@ -50,6 +50,12 @@ public class ReverseBench
     public void MemoryReverseTest()
     {
         var d = NotTooSafeStringReverse.GetLargeString().MemoryReverse();
+    }
+
+    [Benchmark]
+    public void StringCreateReverseTest()
+    {
+        var d = NotTooSafeStringReverse.GetLargeString().StringCreateReverse();      
     }
 
 }
@@ -128,5 +134,26 @@ public static class ExtensionString
         Memory<char> spnStr = new Memory<char>(script.ToCharArray());
         spnStr.Span.Reverse<char>();
         return spnStr.ToString();
+    }
+
+    public static string StringCreateReverse(this string script)
+    {
+        var text = script;
+
+        if (text == null)
+            throw new NullReferenceException();
+
+        if (text == string.Empty)
+            return text;
+
+        return string.Create(text.Length, text, (output, context) =>
+        {
+            int length = context.Length - 1;
+            for (int i = length; i >= 0; i--)
+            {
+                output[length - i] = context[i];
+            }
+        });
+
     }
 }
