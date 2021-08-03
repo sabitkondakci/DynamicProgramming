@@ -22,7 +22,7 @@ class NotTooSafeStringReverse
         {
             largeString += insanOlmak;
         }
-        var len = largeString.Length;
+        
         return largeString;
     }
 }
