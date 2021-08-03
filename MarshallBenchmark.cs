@@ -10,7 +10,7 @@ class NotTooSafeStringReverse
     
     public static void Main()
     {
-        var a = BenchmarkRunner.Run<ReverseBench>();      
+        var a = BenchmarkRunner.Run<ReverseBench>();
     }
 
     public static string GetLargeString()
@@ -30,32 +30,39 @@ class NotTooSafeStringReverse
 [MemoryDiagnoser]
 public class ReverseBench
 {
-    
+    string largeString;
+
+    [GlobalSetup]
+    public void CreateLargeString()
+    {
+        largeString = NotTooSafeStringReverse.GetLargeString();
+    }
+
     [Benchmark]
     public void CustomReverseTest()
     {
-        var a = NotTooSafeStringReverse.GetLargeString().CustomReverse();
+        var a = largeString.CustomReverse();
     }
     [Benchmark]
     public void LinqReverseTest()
     {
-        var b = NotTooSafeStringReverse.GetLargeString().LinqReverse();
+        var b = largeString.LinqReverse();
     }
     [Benchmark]
     public void SpanReverseTest()
     {
-        var c = NotTooSafeStringReverse.GetLargeString().SpanReverse();
+        var c = largeString.SpanReverse();
     }
     [Benchmark]
     public void MemoryReverseTest()
     {
-        var d = NotTooSafeStringReverse.GetLargeString().MemoryReverse();
+        var d = largeString.MemoryReverse();
     }
 
     [Benchmark]
     public void StringCreateReverseTest()
     {
-        var d = NotTooSafeStringReverse.GetLargeString().StringCreateReverse();      
+        var d = largeString.StringCreateReverse();      
     }
 
 }
