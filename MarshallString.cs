@@ -2,6 +2,7 @@ public static class ExtensionString
 {
     public static string CustomReverse(this string script)
     {
+        string result = null;
         string strValue = script;
         int strLength = strValue.Length;
 
@@ -10,24 +11,31 @@ public static class ExtensionString
         IntPtr destPtr = Marshal.AllocHGlobal(strLength + 1);
 
         // The unsafe section where byte pointers are used.
-        unsafe
+        if (sourcePtr != IntPtr.Zero && destPtr != IntPtr.Zero)
         {
-            byte *src = (byte *)sourcePtr.ToPointer();
-            byte *dst = (byte *)destPtr.ToPointer();
-
-            if (strLength > 0)
+            unsafe
             {
-                // set the source pointer to the end of the string
-                // to do a reverse copy.
-                src += strLength - 1;
-                while (strLength-- > 0)
+                byte *src = (byte *)sourcePtr.ToPointer();
+                byte *dst = (byte *)destPtr.ToPointer();
+
+                if (strLength > 0)
                 {
-                    *dst++ = *src--;
+                    // set the source pointer to the end of the string
+                    // to do a reverse copy.
+                    src += strLength - 1;
+                    while (strLength-- > 0)
+                    {
+                        *dst++ = *src--;
+                    }
+                
+                    *dst = 0;
                 }
-                *dst = 0;
             }
+            
+            result = Marshal.PtrToStringAnsi(destPtr);
         }
-        var result = Marshal.PtrToStringAnsi(destPtr);
+        
+       
         Marshal.FreeHGlobal(sourcePtr);
         Marshal.FreeHGlobal(destPtr);
 
