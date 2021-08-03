@@ -1,7 +1,5 @@
 public static class ExtensionString
 {
-    
-    // testing for a string with a length of 2553
     public static string CustomReverse(this string script)
     {
         string strValue = script;
