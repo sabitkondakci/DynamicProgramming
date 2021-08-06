@@ -1,18 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Security;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Web;
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Running;
-using Iced.Intel;
-using Encoder = System.Text.Encoder;
 
 class BestPractices
 {
