@@ -18,15 +18,8 @@ class BestPractices
 {
     public static void Main()
     {
-         var chunk = new PointerChunk(Enumerable.Range(1, 1000).ToArray(), 200);
-         for (int i = 0; i < chunk.Length; i++)
-         {
-             var temp = chunk[i];
-         }
-         
-         Console.Read();
-
-         //var a = BenchmarkRunner.Run<ChunkBenchmark>();
+        
+         var a = BenchmarkRunner.Run<ChunkBenchmark>();
 
     }
     
@@ -66,7 +59,7 @@ public class ChunkBenchmark
         }
     }
 
-    
+    [Benchmark]
     public void LinqChunkTest()
     {
         var chunk = array.Chunk(1_000);
@@ -77,6 +70,7 @@ public class ChunkBenchmark
     }
 }
 
+// int64, int32, int16, byte, IntPtr
 public sealed class PointerChunk 
 { 
     private IntPtr[] _chunkList;
