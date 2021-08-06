@@ -32,7 +32,9 @@ public sealed class PointerChunk : IDisposable
                 
                 for (ushort j = 0; j < _chunkSize; j++)
                 {
-                    var tempPtr = IntPtr.Add(_chunkList[i], size * j);
+                    var tempPtr = IntPtr.Add(_chunkList[i], size * j); // IntPtr newPtr = IntPtr.Subtract(_chunkList[i], size * j) inverse iteration.
+                    
+                    
                     var value = Marshal.ReadInt32(tempPtr);
                     _partialList[j] = value;
                 }
