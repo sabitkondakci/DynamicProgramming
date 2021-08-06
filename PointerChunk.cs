@@ -124,7 +124,7 @@ public sealed class PointerChunk
     {
         IntPtr[] list;
         int[] tempArr = largeArray;
-        int arrLength = largeArray.Length;
+        int arrLength = tempArr.Length;
         
         int remainder = arrLength % chunkSize;
         int noReminderSize = arrLength / chunkSize;
