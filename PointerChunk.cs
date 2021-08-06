@@ -48,20 +48,21 @@ public static class ArrayExtensions
 public class ChunkBenchmark
 {
     public int[] array;
-
+    public Random random;
     [GlobalSetup]
     public void InitializeArray()
     {
         array = Enumerable.Range(1, 10_000_000).Where(x => x % 2 == 0).ToArray();
+        random = new Random();
     }
 
     [Benchmark]
     public void PointerChunkTest()
     { 
         var pointerChunk = new PointerChunk(array, 1_000);
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 3; i++)
         {
-            var a = pointerChunk[3];
+            var a = pointerChunk[random.Next(1,100)];
         }
     }
 
@@ -69,14 +70,13 @@ public class ChunkBenchmark
     public void LinqChunkTest()
     {
         var chunk = array.Chunk(1_000);
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 3; i++)
         {
-            var a = chunk.ElementAt(3);
+            var a = chunk.ElementAt(random.Next(1,100));
         }
     }
 }
 
-//int32, int16, int64, byte, IntPtr
 public sealed class PointerChunk 
 { 
     private IntPtr[] _chunkList;
@@ -84,6 +84,7 @@ public sealed class PointerChunk
     private int _chunkSize;
     private int _lastLoopSize;
     private int  _chunkListSize { get; }
+    private int _sizeofInt = sizeof(int);
    
     public PointerChunk(int[] largeArray,int chunkSize)
     {
@@ -98,20 +99,18 @@ public sealed class PointerChunk
     {
         get
         {
-            var size = sizeof(int);
-
             if (i == _chunkListSize - 1)
                 _chunkSize = _lastLoopSize;
 
             if (i > _chunkListSize - 1)
-                return null;
+                throw new IndexOutOfRangeException();
             else
             {
                 _partialList = new int[_chunkSize];
                 var tempPtr = _chunkList[i];
                 for (int j = 0; j < _chunkSize; j++)
                 {
-                    var value = Marshal.ReadInt32(tempPtr, size * j);
+                    var value = Marshal.ReadInt32(tempPtr, _sizeofInt * j);
                     _partialList[j] = value;
                 }
 
@@ -123,27 +122,26 @@ public sealed class PointerChunk
     public IntPtr[] Chunk(int[] largeArray,int chunkSize)
     {
         IntPtr[] list;
-        var tempArr = largeArray;
+        int[] tempArr = largeArray;
+        int arrLength = largeArray.Length;
+        
+        int noReminderSize = arrLength / chunkSize;
+        int reminderSize = arrLength / chunkSize + 1;
+        int remainder = arrLength % chunkSize;
+                
+        int loopSize = remainder == 0 ? noReminderSize : reminderSize;
+        _lastLoopSize = remainder == 0 ? chunkSize : remainder;
+                
+        list = new IntPtr[loopSize];
 
         unsafe
         {
-            int bounce = sizeof(int);
             fixed (int* ptr = tempArr)
             {
                 IntPtr iPtr = new IntPtr(ptr);
-                int arrLength = largeArray.Length;
-            
-                int noReminderSize = arrLength / chunkSize;
-                int reminderSize = arrLength / chunkSize + 1;
-                int remainder = arrLength % chunkSize;
-                
-                int loopSize = remainder == 0 ? noReminderSize : reminderSize;
-                _lastLoopSize = remainder == 0 ? chunkSize : remainder;
-                
-                list = new IntPtr[loopSize];
                 for (int i = 0; i < loopSize; i++)
                 {
-                    IntPtr tempPtr = IntPtr.Add(iPtr, i * bounce * chunkSize);
+                    IntPtr tempPtr = IntPtr.Add(iPtr, i * _sizeofInt * chunkSize);
                     list[i] = tempPtr;
                 }
             }
