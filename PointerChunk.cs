@@ -100,11 +100,13 @@ public sealed class PointerChunk
     {
         get
         {
+            
+             if (i > _chunkListSize - 1)
+                throw new IndexOutOfRangeException();
+            
             if (i == _chunkListSize - 1)
                 _chunkSize = _lastLoopSize;
 
-            if (i > _chunkListSize - 1)
-                throw new IndexOutOfRangeException();
             else
             {
                 _partialList = new int[_chunkSize];
