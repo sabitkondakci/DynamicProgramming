@@ -77,6 +77,7 @@ public class ChunkBenchmark
     }
 }
 
+// int64, int32 , int16, byte ,IntPtr
 public sealed class PointerChunk 
 { 
     private IntPtr[] _chunkList;
