@@ -68,10 +68,10 @@ public class ChunkBenchmark
     [Benchmark]
     public void LinqChunkTest()
     {
-        var chunk = array.Chunk(1_000).ToList();
+        var chunk = array.Chunk(1_000);
         for (int i = 0; i < 100; i++)
         {
-            var a = chunk[3];
+            var a = chunk.ElementAt(3);
         }
     }
 }
