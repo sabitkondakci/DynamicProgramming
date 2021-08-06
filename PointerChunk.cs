@@ -119,7 +119,7 @@ public sealed class PointerChunk
         if (largeArray is null)
             throw new NullReferenceException("Array can't be null");
         if (largeArray.Length == 0)
-            throw new ArgumentException("You can't chunk an empty list");
+            throw new ArgumentException("You can't chunk an empty array");
                 
         IntPtr[] list; // thread safe IntPtr list.
         int[] tempArr = largeArray;
