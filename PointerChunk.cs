@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -17,13 +18,15 @@ class BestPractices
 {
     public static void Main()
     {
-        //var chunk = new PointerChunk(Enumerable.Range(1, 1000).ToArray(), 200);
-        // for (int i = 0; i < chunk.Length; i++)
-        // {
-        //     var temp = chunk[i];
-        // }
-       
-        var a = BenchmarkRunner.Run<ChunkBenchmark>();
+         // var chunk = new PointerChunk(Enumerable.Range(1, 1000).ToArray(), 200);
+         // for (int i = 0; i < chunk.Length; i++)
+         // {
+         //     var temp = chunk[i];
+         // }
+         //
+         // Console.Read();
+
+         var a = BenchmarkRunner.Run<ChunkBenchmark>();
 
     }
     
@@ -65,7 +68,7 @@ public class ChunkBenchmark
     [Benchmark]
     public void LinqChunkTest()
     {
-        var chunk = array.Chunk(1_000);
+        var chunk = array.Chunk(1_000).ToList();
         for (int i = 0; i < 100; i++)
         {
             var a = chunk[3];
@@ -73,7 +76,7 @@ public class ChunkBenchmark
     }
 }
 
-public sealed class PointerChunk : IDisposable
+public sealed class PointerChunk 
 { 
     private IntPtr[] _chunkList;
     private int[] _partialList;
@@ -123,6 +126,7 @@ public sealed class PointerChunk : IDisposable
 
         unsafe
         {
+            int bounce = sizeof(int);
             fixed (int* ptr = tempArr)
             {
                 IntPtr iPtr = new IntPtr(ptr);
@@ -131,11 +135,10 @@ public sealed class PointerChunk : IDisposable
                 int noReminderSize = arrLength / chunkSize;
                 int reminderSize = arrLength / chunkSize + 1;
                 int remainder = arrLength % chunkSize;
-            
-                int bounce = sizeof(int);
+                
                 int loopSize = remainder == 0 ? noReminderSize : reminderSize;
                 _lastLoopSize = remainder == 0 ? chunkSize : remainder;
-
+                
                 list = new IntPtr[loopSize];
                 for (int i = 0; i < loopSize; i++)
                 {
@@ -146,14 +149,6 @@ public sealed class PointerChunk : IDisposable
         }
 
         return list;
-    }
-
-    public void Dispose()
-    {
-        for (int i = 0; i < _chunkListSize; i++)
-        {
-            Marshal.FreeHGlobal(_chunkList[i]);
-        }
     }
 }
 
