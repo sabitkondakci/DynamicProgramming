@@ -125,11 +125,11 @@ public sealed class PointerChunk
         int[] tempArr = largeArray;
         int arrLength = largeArray.Length;
         
-        int noReminderSize = arrLength / chunkSize;
-        int reminderSize = arrLength / chunkSize + 1;
         int remainder = arrLength % chunkSize;
-                
-        int loopSize = remainder == 0 ? noReminderSize : reminderSize;
+        int noReminderSize = arrLength / chunkSize;
+        int remainderSize = arrLength / chunkSize + 1;
+
+        int loopSize = remainder == 0 ? noReminderSize : remainderSize;
         _lastLoopSize = remainder == 0 ? chunkSize : remainder;
                 
         list = new IntPtr[loopSize];
