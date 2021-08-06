@@ -18,15 +18,15 @@ class BestPractices
 {
     public static void Main()
     {
-         // var chunk = new PointerChunk(Enumerable.Range(1, 1000).ToArray(), 200);
-         // for (int i = 0; i < chunk.Length; i++)
-         // {
-         //     var temp = chunk[i];
-         // }
-         //
-         // Console.Read();
+         var chunk = new PointerChunk(Enumerable.Range(1, 1000).ToArray(), 200);
+         for (int i = 0; i < chunk.Length; i++)
+         {
+             var temp = chunk[i];
+         }
+         
+         Console.Read();
 
-         var a = BenchmarkRunner.Run<ChunkBenchmark>();
+         //var a = BenchmarkRunner.Run<ChunkBenchmark>();
 
     }
     
@@ -66,7 +66,7 @@ public class ChunkBenchmark
         }
     }
 
-    [Benchmark]
+    
     public void LinqChunkTest()
     {
         var chunk = array.Chunk(1_000);
@@ -77,7 +77,6 @@ public class ChunkBenchmark
     }
 }
 
-// int64, int32 , int16, byte ,IntPtr
 public sealed class PointerChunk 
 { 
     private IntPtr[] _chunkList;
@@ -90,8 +89,8 @@ public sealed class PointerChunk
     public PointerChunk(int[] largeArray,int chunkSize)
     {
         _chunkSize = chunkSize;
-        _chunkList = Chunk(largeArray, chunkSize);
-        _chunkListSize = _chunkList.Length;
+        _chunkList = Chunk(largeArray, chunkSize); // Chunk method handles exceptions.
+        _chunkListSize = _chunkList.Length; // so that _chunkList won't be null.
     }
     
     public int Length => _chunkListSize;
@@ -99,7 +98,7 @@ public sealed class PointerChunk
     public int[] this[int i]
     {
         get
-        {     
+        {
             if (i == _chunkListSize - 1)
                 _chunkSize = _lastLoopSize;
             
@@ -109,6 +108,7 @@ public sealed class PointerChunk
             {
                 _partialList = new int[_chunkSize];
                 var tempPtr = _chunkList[i];
+                
                 for (int j = 0; j < _chunkSize; j++)
                 {
                     var value = Marshal.ReadInt32(tempPtr, _sizeofInt * j);
@@ -122,6 +122,11 @@ public sealed class PointerChunk
 
     public IntPtr[] Chunk(int[] largeArray,int chunkSize)
     {
+        if (largeArray is null)
+            throw new NullReferenceException("Array can't be null");
+        if (largeArray.Length == 0)
+            throw new ArgumentException("You can't chunk an empty list");
+                
         IntPtr[] list;
         int[] tempArr = largeArray;
         int arrLength = tempArr.Length;
@@ -142,9 +147,7 @@ public sealed class PointerChunk
                 IntPtr iPtr = new IntPtr(ptr);
                 for (int i = 0; i < loopSize; i++)
                 {
-                    // or IntPtr tempPtr = iPtr + i * _sizeofInt * chunkSize;
-                    // offset a pointer per chunk.
-                    IntPtr tempPtr = IntPtr.Add(iPtr, i * _sizeofInt * chunkSize); 
+                    IntPtr tempPtr = iPtr + i * _sizeofInt * chunkSize;
                     list[i] = tempPtr;
                 }
             }
