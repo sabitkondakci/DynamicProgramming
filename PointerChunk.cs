@@ -142,7 +142,7 @@ public sealed class PointerChunk
                 IntPtr iPtr = new IntPtr(ptr);
                 for (int i = 0; i < loopSize; i++)
                 {
-                    IntPtr tempPtr = IntPtr.Add(iPtr, i * _sizeofInt * chunkSize);
+                    IntPtr tempPtr = IntPtr.Add(iPtr, i * _sizeofInt * chunkSize); // offset a pointer per chunk.
                     list[i] = tempPtr;
                 }
             }
