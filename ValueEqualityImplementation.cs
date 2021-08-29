@@ -1,45 +1,45 @@
 namespace ValueEqualityClass
 {
-    class TwoDPoint : IEquatable<TwoDPoint>
-    {
-        public int X { get; private set; }
-        public int Y { get; private set; }
-
-        public TwoDPoint(int x, int y)
+    	class TwoDPoint : IEquatable<TwoDPoint>
         {
-            if (x is (< 1 or > 640) || y is (< 1 or > 480))
-            {
-                throw new ArgumentException("640x480 2D Model,  1 <= x <= 640 & 1 <= y <= 480");
-            }
-            this.X = x;
-            this.Y = y;
+        	public int X { get; private set; }
+        	public int Y { get; private set; }
+	
+        	public TwoDPoint(int x, int y)
+        	{
+        	    if (x is (< 1 or > 640) || y is (< 1 or > 480))
+        	    {
+        	        throw new ArgumentException("640x480 2D Model,  1 <= x <= 640 & 1 <= y <= 480");
+        	    }
+        	    this.X = x;
+        	    this.Y = y;
 		}
-		
+			
 		protected virtual Type EqualityContract => typeof(TwoDPoint);
-
+	
 		public override bool Equals(object obj) => this.Equals(obj as TwoDPoint);
-
-        public bool Equals(TwoDPoint point)
-        {
-            if (point is null)
+	
+        	public bool Equals(TwoDPoint point)
+        	{
+        	    	if (point is null)
 				return false;
-				
+					
 			// If run-time types are not exactly the same, return false.
 			if (this.EqualityContract != point.EqualityContract)
 				return false;
-				
+					
 			// Optimization for a common success case.
-            if (object.ReferenceEquals(this,point))          
-                return true;
-
+        	    	if (object.ReferenceEquals(this,point))          
+        	        	return true;
+	
 			// Return true if the fields match.
 			// Note that the base class is not invoked because it is
 			// System.Object, which defines Equals as reference equality.
 			return (X == point.X) && (Y == point.Y);
 		}
-
+	
 		public override int GetHashCode() => (X, Y).GetHashCode();
-
+	
 		public static bool operator ==(TwoDPoint left, TwoDPoint right)
 		{
 			if (left is null)
@@ -48,7 +48,6 @@ namespace ValueEqualityClass
 				{
 					return true;
 				}
-
 				// Only the left side is null.
 				return false;
 			}
@@ -57,15 +56,14 @@ namespace ValueEqualityClass
 		}
 
 		public static bool operator !=(TwoDPoint left, TwoDPoint right) => !(left == right);
-	}
+        }
 
 	// For the sake of simplicity, assume a ThreeDPoint IS a TwoDPoint.
 	class ThreeDPoint : TwoDPoint, IEquatable<ThreeDPoint>
 	{
 		public int Z { get; private set; }
 
-		public ThreeDPoint(int x, int y, int z)
-			: base(x, y)
+		public ThreeDPoint(int x, int y, int z) : base(x, y)
 		{
 			if ((z < 1) || (z > 2000))
 			{
