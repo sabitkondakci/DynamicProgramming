@@ -77,7 +77,7 @@ namespace ValueEqualityClass
 		public override bool Equals(object obj) => this.Equals(obj as ThreeDPoint);
 
 		public bool Equals(ThreeDPoint point)
-		{
+	        {
 			if (point is null)			
 				return false;
 				
@@ -96,32 +96,31 @@ namespace ValueEqualityClass
 				// and do the run-time type comparison.
 				return base.Equals(point as TwoDPoint);
 			}
-			else
-			{
-				return false;
-			}
-		}
+			
+			return false;
+			
+		 }
 
-		public override int GetHashCode() => (X, Y, Z).GetHashCode();
-
-		public static bool operator ==(ThreeDPoint left, ThreeDPoint right)
-		{
-			if (left is null)
-			{
-				if (right is null)
-				{
-					// null == null = true.
-					return true;
-				}
-
-				// Only the left side is null.
-				return false;
-			}
-			// Equals handles the case of null on right side.
-			return left.Equals(right);
-		}
-
-		public static bool operator !=(ThreeDPoint left, ThreeDPoint right) => !(left == right);
+		 public override int GetHashCode() => (X, Y, Z).GetHashCode();
+ 
+		 public static bool operator ==(ThreeDPoint left, ThreeDPoint right)
+		 {
+		 	if (left is null)
+		 	{
+		 		if (right is null)
+		 		{
+		 			// null == null = true.
+		 			return true;
+		 		}
+ 
+		 		// Only the left side is null.
+		 		return false;
+		 	}
+		 	// Equals handles the case of null on right side.
+		 	return left.Equals(right);
+		 }
+ 
+		 public static bool operator !=(ThreeDPoint left, ThreeDPoint right) => !(left == right);
 	}
 
 	class Program
