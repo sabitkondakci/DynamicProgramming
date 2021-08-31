@@ -14,8 +14,16 @@ namespace ValueEqualityClass
         	    this.X = x;
         	    this.Y = y;
 		}
+		
+		protected TwoDPoint (TwoDPoint pointObject)
+		{
+			X = pointObject.X;
+			Y = pointObject.Y;
+		}
 			
 		protected virtual Type EqualityContract => typeof(TwoDPoint);
+		
+		public virtual TwoDPoint Clone() => new TwoDPoint(this);
 	
 		public override bool Equals(object obj) => this.Equals(obj as TwoDPoint);
 	
