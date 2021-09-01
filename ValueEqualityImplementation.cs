@@ -27,8 +27,9 @@ namespace ValueEqualityClass
 		public virtual TwoDPoint Clone() => new TwoDPoint(this);
 
 		public override bool Equals(object obj) => this.Equals(obj as TwoDPoint);
-
-		public bool Equals(TwoDPoint point)
+		
+		// it's virtual in record so that I declared it "virtual"
+		public virtual bool Equals(TwoDPoint point)
 		{
 			if (point is null)
 				return false;
@@ -93,7 +94,7 @@ namespace ValueEqualityClass
 
 		public override bool Equals(object obj) => this.Equals(obj as ThreeDPoint);
 
-		public bool Equals(ThreeDPoint point)
+		public virtual bool Equals(ThreeDPoint point)
 		{
 			if (point is null)
 				return false;
