@@ -13,5 +13,5 @@ record Point (double X, double Y)
 	public double DistanceFromOrigin => _distance ??= Math.Sqrt (X * X + Y * Y);
 
 	protected Point (Point other) => (X, Y) = (other.X, other.Y); 
- // protected Point (Point other) => (X, Y) = other;
+     // protected Point (Point other) => (X, Y) = other;
 }
