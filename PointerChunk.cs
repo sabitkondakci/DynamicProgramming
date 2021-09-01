@@ -61,6 +61,7 @@ public class ChunkBenchmark
     }
 }
 
+[SkipLocalsInit]
 // int64, int32, int16, byte, IntPtr
 public sealed class PointerChunk 
 { 
