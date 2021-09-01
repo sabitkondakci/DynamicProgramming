@@ -28,7 +28,7 @@ namespace ValueEqualityClass
 
 		public override bool Equals(object obj) => this.Equals(obj as TwoDPoint);
 		
-		// it's virtual in record so that I declared it "virtual"
+		// it can be overriden by another virtual bool Equals method.
 		public virtual bool Equals(TwoDPoint point)
 		{
 			if (point is null)
