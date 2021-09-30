@@ -163,6 +163,8 @@ namespace ConsoleDemo
 		{
 			var length = websites.Length;
 			var taskNetworkInfo = new Queue<Task<NetworkInfo>>();
+			
+			// allow 10 worker thread in at a time, this will prevent the thread exhaustion.
             		using (var semaphoreTen = new SemaphoreSlim(10))
             		{
                 		for (int i = 0; i < length; i++)
