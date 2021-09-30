@@ -173,10 +173,13 @@ namespace ConsoleDemo
                 		    NetworkInfo info = new();
                 		    taskNetworkInfo.Enqueue(Task.Run(async () =>
                 		    {
+					
+					// semaphoreTen will let only 10 worker thread to get their job done at a time.
+					await semaphoreTen.WaitAsync(cancellationToken);  
 					Ping ping = new();
+					    
                 		        try
                 		        {
-                		            await semaphoreTen.WaitAsync(cancellationToken);  
                 		            var pingResult = await ping.SendPingAsync(websites[k], 500);
 									
                 		            info = new NetworkInfo
