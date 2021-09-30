@@ -174,7 +174,7 @@ namespace ConsoleDemo
                 		        try
                 		        {
                 		            await semaphoreTen.WaitAsync(cancellationToken);
-                		            Ping ping = new();
+                		            using Ping ping = new();
                 		            var pingResult = await ping.SendPingAsync(websites[k], 500);
 									
                 		            info = new NetworkInfo
