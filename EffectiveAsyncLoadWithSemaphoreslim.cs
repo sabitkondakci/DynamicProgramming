@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleDemo
 {
-    class EffectiveLoad
+    	class EffectiveLoad
 	{
 		static async Task Main()
 		{
@@ -163,41 +163,41 @@ namespace ConsoleDemo
 		{
 			var length = websites.Length;
 			var taskNetworkInfo = new Queue<Task<NetworkInfo>>();
-            using (var semaphoreTen = new SemaphoreSlim(10))
-            {
-                for (int i = 0; i < length; i++)
-                {
-                    var k = i;
-                    NetworkInfo info = new();
-                    taskNetworkInfo.Enqueue(Task.Run(async () =>
-                    {
-                        try
-                        {
-                            await semaphoreTen.WaitAsync(cancellationToken);
-                            Ping ping = new();
-                            var pingResult = await ping.SendPingAsync(websites[k], 500);
-							
-                            info = new NetworkInfo
-                            {
-                                Address = pingResult.Address,
-                                Website = websites[k],
-                                RoundTripTime = pingResult.RoundtripTime,
-                                Status = pingResult.Status
-                            };
-                        }
-                        catch { /* log the errors */}
-                        finally { semaphoreTen.Release(); }
-                        return info;
-                    }, cancellationToken));
-                }
+            		using (var semaphoreTen = new SemaphoreSlim(10))
+            		{
+                		for (int i = 0; i < length; i++)
+                		{
+                		    var k = i;
+                		    NetworkInfo info = new();
+                		    taskNetworkInfo.Enqueue(Task.Run(async () =>
+                		    {
+                		        try
+                		        {
+                		            await semaphoreTen.WaitAsync(cancellationToken);
+                		            Ping ping = new();
+                		            var pingResult = await ping.SendPingAsync(websites[k], 500);
+									
+                		            info = new NetworkInfo
+                		            {
+                		                Address = pingResult.Address,
+                		                Website = websites[k],
+                		                RoundTripTime = pingResult.RoundtripTime,
+                		                Status = pingResult.Status
+                		            };
+                		        }
+                		        catch { /* log the errors */}
+                		        finally { semaphoreTen.Release(); }
+                		        return info;
+                		    }, cancellationToken));
+                		}
 
-                while (taskNetworkInfo.TryDequeue(out var networkInfo))
-                {
-                    yield return await networkInfo;
-                }
-            }
+                		while (taskNetworkInfo.TryDequeue(out var networkInfo))
+                		{
+                		    yield return await networkInfo;
+                		}
+            		}
 
-        }
+        	}
 
 	}
   
