@@ -173,10 +173,10 @@ namespace ConsoleDemo
                 		    NetworkInfo info = new();
                 		    taskNetworkInfo.Enqueue(Task.Run(async () =>
                 		    {
+					Ping ping = new();
                 		        try
                 		        {
-                		            await semaphoreTen.WaitAsync(cancellationToken);
-                		            using Ping ping = new();
+                		            await semaphoreTen.WaitAsync(cancellationToken);  
                 		            var pingResult = await ping.SendPingAsync(websites[k], 500);
 									
                 		            info = new NetworkInfo
@@ -188,7 +188,7 @@ namespace ConsoleDemo
                 		            };
                 		        }
                 		        catch { /* log the errors */}
-                		        finally { semaphoreTen.Release(); }
+                		        finally { semaphoreTen.Release(); ping.Dispose(); }
                 		        return info;
                 		    }, cancellationToken));
                 		}
