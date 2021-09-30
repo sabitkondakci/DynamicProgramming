@@ -143,7 +143,7 @@ namespace ConsoleDemo
 				// pingResultList.WithCancellation(source.Token) is to cancel IAsyncEnumerable's enumerator ==> IAsyncEnumerable <out T>.GetAsyncEnumerator(CancellationToken)
 
 				var pingResultList = PingAsync(sites,source.Token);
-				await foreach (var pingResult in pingResultList.WithCancellation(source.Token))
+				await foreach (var pingResult in pingResultList.WithCancellation(source.Token).ConfigureAwait(false))
 				{
 					Console.WriteLine($"Website:{pingResult.Website}\n"
 				+ $"Address:{pingResult.Address}\nStatus:{pingResult.Status}\n"
