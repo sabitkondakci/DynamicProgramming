@@ -29,3 +29,8 @@ public List<double> FibonacciSeries(int firstNItem)
 	
 	return store;
 }
+
+// asynchronous version with Memory<T> as an argument
+public async Task<List<double>> FibonacciSeriesAsync(int firstNItem,Memory<double> fibo)
+	=> await Task.Run (() => FibonacciSeries(firstNItem,fibo.Span));
+
