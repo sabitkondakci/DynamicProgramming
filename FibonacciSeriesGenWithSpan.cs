@@ -1,5 +1,9 @@
 public List<double> FibonacciSeries(int firstNItem)
 {
+	
+    	if (firstNItem < 0)
+        	throw new ArgumentException("firstNItem >= 0", nameof(firstNItem));
+	
 	List<double> store = new();
 	const int stackArrSize = 25;	
 	Span<double> fibo = stackalloc double[stackArrSize];
