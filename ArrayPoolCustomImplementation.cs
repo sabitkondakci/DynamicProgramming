@@ -12,31 +12,6 @@ public void SharedMemory(int nItemAtATime)
 	pooledList.Dump();
 }
 
-#region Tool
-//public class Tool
-//{
-//	public int Id { get; set; }
-//	public string FirstName { get; set; }
-//}
-//
-//public static void SharedMemory()
-//{
-//	ArrayPool<Tool> arrayPool = ArrayPool<Tool>.Shared;
-//	var rentTool = arrayPool.Rent(6);
-//
-//	rentTool[0] = new Tool() { Id = 1, FirstName = "Anil" };
-//	rentTool[1] = new Tool() { Id = 2, FirstName = "Samet" };
-//	rentTool[2] = new Tool() { Id = 3, FirstName = "Emin" };
-//	rentTool[3] = new Tool() { Id = 4, FirstName = "Nihal" };
-//	rentTool[4] = new Tool() { Id = 5, FirstName = "Umut" };
-//	rentTool[5] = new Tool() { Id = 6, FirstName = "Pinar" };
-//
-//
-//	rentTool.Dump();
-//    arrayPool.Return(rentTool);
-//}
-#endregion
-
 #region Enum_Hair&Eye_Color
 public enum HairColor : byte
 {
