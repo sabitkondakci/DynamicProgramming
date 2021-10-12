@@ -7,22 +7,36 @@ public UserQuery()
 
 async Task Main()
 {
+	Task[] tasks = new Task[100];
+	for (int i = 0; i < tasks.Length; i++)
+	{
+		tasks[i] = Task.Run(() => { ReturnWith(list); SharedMemory(bufferSize); });
+	}
 
-	var t1 = Task.Run(() => { ReturnWith(list); SharedMemory(bufferSize); });
-	var t2 = Task.Run(() => { ReturnWith(list); SharedMemory(bufferSize); });
-	var t3 = Task.Run(() => { ReturnWith(list); SharedMemory(bufferSize); });
-	var t4 = Task.Run(() => { ReturnWith(list); SharedMemory(bufferSize); });
-	var t5 = Task.Run(() => { ReturnWith(list); SharedMemory(bufferSize); });
-	var t6 = Task.Run(() => { ReturnWith(list); SharedMemory(bufferSize); });
-
-
-	await Task.WhenAll(t1,t2,t3,t4,t5);
+	await Task.WhenAll(tasks);
 }
 
 public void SharedMemory(int nItemAtATime)
 {
 	WisconsinDLPool wisPoolObject = new();
 	var pooledList = wisPoolObject.Rent(nItemAtATime); // WisconsinDriverLicenseInfo[]
+	
+	for (int i = 0; i < bufferSize; i++)
+	{
+		pooledList[i].address = "Rize";
+		pooledList[i].dateOfBirth = DateTime.Now;
+		pooledList[i].expirationDate = DateTime.Now.Add(TimeSpan.FromDays(100));
+		pooledList[i].eyeColor = EyeColor.Gray;
+		pooledList[i].hairColor = HairColor.PaintedMi;
+		pooledList[i].heightInch = 243;
+		pooledList[i].weightPound = 443;
+		pooledList[i].IsDonor = true;
+		pooledList[i].ISS = DateTime.Now.Add(TimeSpan.FromDays(-100));
+		pooledList[i].licenceClass = 'D';	
+		pooledList[i].licenceId = "4433";
+		pooledList[i].sex  = 'F';
+	}
+	
 	pooledList.Dump();
 }
 
@@ -122,7 +136,7 @@ public class WisconsinDLPool : ArrayPool<WisconsinDriverLicenseInfo>
 {
 
 	private int length;
-
+	
 	public override WisconsinDriverLicenseInfo[] Rent(int minimumLength)
 	{
 		length = minimumLength;
