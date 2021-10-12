@@ -1,8 +1,22 @@
-
-void Main()
+int bufferSize = 1000;
+WisconsinDriverLicenseInfo[] list ;
+public UserQuery()
 {
-	GenerateLicencePlate(10); // first creation with Shared.Return
-	SharedMemory(10); // rent already created array of WisconsinDriverLicenseInfo
+	list = GenerateLicencePlateObjects(bufferSize);
+}
+
+async Task Main()
+{
+
+	var t1 = Task.Run(() => { ReturnWith(list); SharedMemory(bufferSize); });
+	var t2 = Task.Run(() => { ReturnWith(list); SharedMemory(bufferSize); });
+	var t3 = Task.Run(() => { ReturnWith(list); SharedMemory(bufferSize); });
+	var t4 = Task.Run(() => { ReturnWith(list); SharedMemory(bufferSize); });
+	var t5 = Task.Run(() => { ReturnWith(list); SharedMemory(bufferSize); });
+	var t6 = Task.Run(() => { ReturnWith(list); SharedMemory(bufferSize); });
+
+
+	await Task.WhenAll(t1,t2,t3,t4,t5);
 }
 
 public void SharedMemory(int nItemAtATime)
@@ -61,7 +75,7 @@ public record WisconsinDriverLicenseInfo
 	public DateTime ISS { get; set; }
 }
 
-public void GenerateLicencePlate(int nItemAtATime)
+public static  WisconsinDriverLicenseInfo[] GenerateLicencePlateObjects(int nItemAtATime)
 {
 	HairColor[] hairColors = Enum.GetValues<HairColor>();
 	EyeColor[] eyeColors = Enum.GetValues<EyeColor>();
@@ -94,8 +108,14 @@ public void GenerateLicencePlate(int nItemAtATime)
 		};
 	}
 
-	wisconsinDLInfoArray.Dump();
 	wisPoolObject.Return(wisconsinDLInfoArray);
+	return wisconsinDLInfoArray;
+}
+
+public static void ReturnWith(WisconsinDriverLicenseInfo[] wisconsinInfo)
+{
+	WisconsinDLPool pool = new();
+	pool.Return(wisconsinInfo);
 }
 
 public class WisconsinDLPool : ArrayPool<WisconsinDriverLicenseInfo>
@@ -142,4 +162,3 @@ public class WisconsinDLPool : ArrayPool<WisconsinDriverLicenseInfo>
 		Shared.Return(array);
 	}
 }
-
