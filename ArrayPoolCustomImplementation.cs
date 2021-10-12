@@ -8,7 +8,7 @@ void Main()
 public void SharedMemory(int nItemAtATime)
 {
 	WisconsinDLPool wisPoolObject = new();
-	var pooledList = wisPoolObject.Rent(nItemAtATime);
+	var pooledList = wisPoolObject.Rent(nItemAtATime); // WisconsinDriverLicenseInfo[]
 	pooledList.Dump();
 }
 
