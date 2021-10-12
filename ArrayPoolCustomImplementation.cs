@@ -47,18 +47,18 @@ sealed class SingletonArrayPool<T>
 
 public record WisconsinDriverLicenseInfo
 {
-	public string licenceId { get; init; }
-	public char licenceClass { get; init; }
-	public char sex { get; init; }
-	public string address { get; init; }
-	public ushort weightPound { get; init; }
-	public ushort heightInch { get; init; }
-	public DateTime dateOfBirth { get; init; }
-	public DateTime expirationDate { get; init; }
-	public HairColor hairColor { get; init; }
-	public EyeColor eyeColor { get; init; }
-	public bool IsDonor { get; init; }
-	public DateTime ISS { get; init; }
+	public string licenceId { get; set; }
+	public char licenceClass { get; set; }
+	public char sex { get; set; }
+	public string address { get; set; }
+	public ushort weightPound { get; set; }
+	public ushort heightInch { get; set; }
+	public DateTime dateOfBirth { get; set; }
+	public DateTime expirationDate { get; set; }
+	public HairColor hairColor { get; set; }
+	public EyeColor eyeColor { get; set; }
+	public bool IsDonor { get; set; }
+	public DateTime ISS { get; set; }
 }
 
 public void GenerateLicencePlate(int nItemAtATime)
