@@ -95,7 +95,7 @@ public void GenerateLicencePlate(int nItemAtATime)
 	}
 
 	wisconsinDLInfoArray.Dump();
-	wisPoolObject.Return(wisconsinDLInfoArray, true);
+	wisPoolObject.Return(wisconsinDLInfoArray);
 }
 
 public class WisconsinDLPool : ArrayPool<WisconsinDriverLicenseInfo>
