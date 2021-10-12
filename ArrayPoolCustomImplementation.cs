@@ -2,7 +2,7 @@ int bufferSize = 1000;
 WisconsinDriverLicenseInfo[] list ;
 public UserQuery()
 {
-	list = GenerateLicencePlateObjects(bufferSize);
+	list = GenerateLicenceObjects(bufferSize);
 }
 
 async Task Main()
@@ -75,7 +75,7 @@ public record WisconsinDriverLicenseInfo
 	public DateTime ISS { get; set; }
 }
 
-public static  WisconsinDriverLicenseInfo[] GenerateLicencePlateObjects(int nItemAtATime)
+public static  WisconsinDriverLicenseInfo[] GenerateLicenceObjects(int nItemAtATime)
 {
 	HairColor[] hairColors = Enum.GetValues<HairColor>();
 	EyeColor[] eyeColors = Enum.GetValues<EyeColor>();
