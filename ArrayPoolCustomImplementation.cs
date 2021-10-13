@@ -1,4 +1,4 @@
-// LiqPad implementation
+// LinqPad implementation
 
 int bufferSize = 1000;
 WisconsinDriverLicenseInfo[] list ;
