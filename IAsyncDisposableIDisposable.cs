@@ -7,10 +7,6 @@ public class ExampleAsyncDisposable : IAsyncDisposable, IDisposable
 		_jsonWriter = new(new MemoryStream());
 	}
 	
-	public async Task FlushAsync()
-	{
-		await _jsonWriter.FlushAsync();
-	}
 	public void Dispose()
 	{
 		Dispose(true);
