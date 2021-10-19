@@ -97,3 +97,19 @@ class ExampleConjunctiveDisposableusing : IDisposable, IAsyncDisposable
 		_disposableResource = null;
 	}
 }
+
+// using await in main
+
+class ExampleConfigureAwaitProgram
+{
+    static async Task Main()
+    {
+        var exampleAsyncDisposable = new ExampleAsyncDisposable();
+        await using (exampleAsyncDisposable.ConfigureAwait(false))
+        {
+            // Interact with the exampleAsyncDisposable instance.
+        }
+
+        Console.ReadLine();
+    }
+}
