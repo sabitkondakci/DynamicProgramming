@@ -138,11 +138,10 @@ namespace ConsoleDemo
 			using CancellationTokenSource source = new(timeout);
 
 			try
-			{
-				// PingAsync(sites,source.Token) is to cancel running tasks
+			{	
 				// pingResultList.WithCancellation(source.Token) is to cancel IAsyncEnumerable's enumerator ==> IAsyncEnumerable <out T>.GetAsyncEnumerator(CancellationToken)
 
-				var pingResultList = PingAsync(sites,source.Token);
+				var pingResultList = PingAsync(sites);
 				await foreach (var pingResult in pingResultList.WithCancellation(source.Token).ConfigureAwait(false))
 				{
 					Console.WriteLine($"Website:{pingResult.Website}\n"
