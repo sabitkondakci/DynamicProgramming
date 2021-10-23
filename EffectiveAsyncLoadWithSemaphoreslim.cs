@@ -10,7 +10,8 @@ using System.Threading.Tasks;
 
 namespace ConsoleDemo
 {
-    	class EffectiveLoad
+
+	class EffectiveLoad
 	{
 		static async Task Main()
 		{
@@ -122,7 +123,7 @@ namespace ConsoleDemo
 			#endregion
 
 			// pass a timeout accordingly
-			await PrintPingList(list,300);
+			await PrintPingList(list, 300);
 		}
 
 		public readonly struct NetworkInfo
@@ -138,18 +139,12 @@ namespace ConsoleDemo
 			using CancellationTokenSource source = new(timeout);
 
 			try
-			{	
+			{
+				// PingAsync(sites,source.Token) is to cancel running tasks
 				// pingResultList.WithCancellation(source.Token) is to cancel IAsyncEnumerable's enumerator ==> IAsyncEnumerable <out T>.GetAsyncEnumerator(CancellationToken)
 
 				var pingResultList = PingAsync(sites,source.Token);
-				await foreach (var pingResult in pingResultList.WithCancellation(source.Token).ConfigureAwait(false))
-				{
-					Console.WriteLine($"Website:{pingResult.Website}\n"
-				+ $"Address:{pingResult.Address}\nStatus:{pingResult.Status}\n"
-				+ $"RoundTripTime: {pingResult.RoundTripTime}");
-
-					Console.WriteLine();
-				}
+				await Print(pingResultList,source.Token);
 			}
 			catch (OperationCanceledException)
 			{
@@ -157,52 +152,73 @@ namespace ConsoleDemo
 				// log it!
 			}
 		}
+		
+		public static async Task Print(IAsyncEnumerable<NetworkInfo> pingResultList,
+		CancellationToken token = default)
+		{
+			await foreach (var pingResult in pingResultList
+				.WithCancellation(token).ConfigureAwait(false))
+			{
+				Console.WriteLine($"Website:{pingResult.Website}\n"
+			+ $"Address:{pingResult.Address}\nStatus:{pingResult.Status}\n"
+			+ $"RoundTripTime: {pingResult.RoundTripTime}");
 
+				Console.WriteLine();
+			}
+		}
+		
 		public static async IAsyncEnumerable<NetworkInfo> PingAsync(string[] websites, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
 			var length = websites.Length;
 			var taskNetworkInfo = new Queue<Task<NetworkInfo>>();
-			
+
 			// allow 10 worker thread in at a time, this will prevent the thread exhaustion.
-            		using (var semaphoreTen = new SemaphoreSlim(10))
-            		{
-                		for (int i = 0; i < length; i++)
-                		{
-                		    var k = i;
-                		    NetworkInfo info = new();
-                		    taskNetworkInfo.Enqueue(Task.Run(async () =>
-                		    {
-					
+			using (var semaphoreTen = new SemaphoreSlim(10))
+			{
+				for (int i = 0; i < length; i++)
+				{
+					var k = i;
+					NetworkInfo info = new();
+					taskNetworkInfo.Enqueue(Task.Run(async () =>
+					{
 					// semaphoreTen will let only 10 worker thread to get their job done at a time.
-					await semaphoreTen.WaitAsync(cancellationToken);  
-					Ping ping = new();
-					    
-                		        try
-                		        {
-                		            var pingResult = await ping.SendPingAsync(websites[k], 500);
-									
-                		            info = new NetworkInfo
-                		            {
-                		                Address = pingResult.Address,
-                		                Website = websites[k],
-                		                RoundTripTime = pingResult.RoundtripTime,
-                		                Status = pingResult.Status
-                		            };
-                		        }
-                		        catch { /* log the errors */}
-                		        finally { semaphoreTen.Release(); ping.Dispose(); }
-                		        return info;
-                		    }, cancellationToken));
-                		}
+						await semaphoreTen.WaitAsync(cancellationToken);
+						Ping ping = new();
 
-                		while (taskNetworkInfo.TryDequeue(out var networkInfo))
-                		{
-                		    yield return await networkInfo;
-                		}
-            		}
+						try
+						{
+							var pingResult = await ping.SendPingAsync(websites[k], 500);
 
-        	}
+							info = new NetworkInfo
+							{
+								Address = pingResult.Address,
+								Website = websites[k],
+								RoundTripTime = pingResult.RoundtripTime,
+								Status = pingResult.Status
+							};
+						}
+						catch { /* log the errors */}
+						finally 
+						{
+							// check if there's a waiting semaphore
+							if(semaphoreTen.CurrentCount != 0)
+								semaphoreTen.Release();
+								
+						 	ping.Dispose();
+						}
+						return info;
+					}, cancellationToken));
+				}
+
+				while (taskNetworkInfo.TryDequeue(out var networkInfo))
+				{
+					yield return await networkInfo;				
+				}
+				
+			}
+
+		}
 
 	}
-  
+    	
 }
