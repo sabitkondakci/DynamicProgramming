@@ -200,8 +200,7 @@ namespace ConsoleDemo
 						catch { /* log the errors */}
 						finally 
 						{
-							// check if there's a waiting semaphore
-							if(semaphoreTen.CurrentCount != 0)
+							if(!cancellationToken.IsCancellationRequested)
 								semaphoreTen.Release();
 								
 						 	ping.Dispose();
