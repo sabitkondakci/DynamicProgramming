@@ -21,6 +21,6 @@
 ---
 
 ## Table of Contents
-[Asynchronous ArrayPool Implementation](https://github.com/SabitKondakci/DynamicProgramming/blob/main/ArrayPoolCustomImplementation.cs)
-[ArrayPool Singleton Design](https://github.com/SabitKondakci/DynamicProgramming/blob/main/ArrayPoolSingletonDesign.cs)
+- [Asynchronous ArrayPool Implementation](https://github.com/SabitKondakci/DynamicProgramming/blob/main/ArrayPoolCustomImplementation.cs)
+- [ArrayPool Singleton Design](https://github.com/SabitKondakci/DynamicProgramming/blob/main/ArrayPoolSingletonDesign.cs)
 
