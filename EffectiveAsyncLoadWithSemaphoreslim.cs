@@ -164,6 +164,10 @@ namespace ConsoleDemo
 			+ $"RoundTripTime: {pingResult.RoundTripTime}");
 
 				Console.WriteLine();
+				
+				// catch the cancellation quicker
+				if(token.IsCancellationRequested)
+					throw new OperationCanceledException();
 			}
 		}
 		
