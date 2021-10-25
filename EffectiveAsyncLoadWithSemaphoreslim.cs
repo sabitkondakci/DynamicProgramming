@@ -168,18 +168,18 @@ class EffectiveLoad
 		var length = websites.Length;
 		var taskNetworkInfo = new Queue<Task<NetworkInfo>>();
 
-		// allow 10 worker thread in at a time, this will prevent the thread exhaustion.
-		using (var semaphoreTen = new SemaphoreSlim(10))
+		// allow 20 worker thread in at a time, this will prevent the thread exhaustion.
+		using (var semaphore_20 = new SemaphoreSlim(20))
 		{
 			for (int i = 0; i < length; i++)
 			{
 				var k = i;
 				NetworkInfo info = new();
-				await semaphoreTen.WaitAsync(cancellationToken);
+				await semaphore_20.WaitAsync(cancellationToken);
 
 				taskNetworkInfo.Enqueue(Task.Run(async () =>
 				{
-					// semaphoreTen will let only 10 worker thread to get their job done at a time.
+
 					Ping ping = new();
 
 					try
@@ -204,17 +204,17 @@ class EffectiveLoad
 
 				}, cancellationToken));
 
-				// flush 10 items to IAsyncEnumerable at a time
-				int qFlush = (i + 1) % 10;
-				if (qFlush == 0 || i >= length - 10) // "i >= length - 10" for the last remaining elements in taskNetworkInfo Queue
+				// flush 20 items to IAsyncEnumerable at a time
+				int qFlush = (i + 1) % 20;
+				if (qFlush == 0 || i >= length - 20)
 				{
-					while (taskNetworkInfo.TryDequeue(out var networkInfo))
-					{
-						if (!cancellationToken.IsCancellationRequested)
-							semaphoreTen.Release();
-
-						yield return await networkInfo;
-					}
+                    			while (taskNetworkInfo.TryDequeue(out var networkInfo))
+                    			{
+                    			    if (!cancellationToken.IsCancellationRequested)
+                    			        semaphore_20.Release();
+			
+                    			    yield return await networkInfo; 
+                    			}
 				}
 			}
 		}
