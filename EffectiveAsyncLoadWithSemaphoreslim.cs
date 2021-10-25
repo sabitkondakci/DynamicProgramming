@@ -204,9 +204,11 @@ class EffectiveLoad
 
 				}, cancellationToken));
 
-				// flush 20 items to IAsyncEnumerable at a time
-				int qFlush = (i + 1) % 20;
-				if (qFlush == 0 || i >= length - 20)
+				// flush 10 items to IAsyncEnumerable at a time
+				// other 10 items in queue will be completed in the meantime
+				// this will create a nice throughput.
+				int qFlush = (i + 1) % 10;
+				if (qFlush == 0 || i >= length - 10)
 				{
                     			while (taskNetworkInfo.TryDequeue(out var networkInfo))
                     			{
