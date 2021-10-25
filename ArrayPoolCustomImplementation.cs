@@ -20,7 +20,7 @@ public class TimerNexSix
         for (int i = 0; i < tasks.Length; i++)
 
         {
-	    // prevent thread exhaustion!
+	    // prevent thread exhaustion! which is released in ShareMemory(int,SemaphoreSlim)
             semahore.Wait();
 
             tasks[i] = Task.Run(() =>
