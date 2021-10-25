@@ -211,7 +211,7 @@ class EffectiveLoad
 
 				// flush 10 items to IAsyncEnumerable at a time
 				int qFlush = (i + 1) % 10;
-				if (qFlush == 0 || i >= length - 10) // for the last remaining elements in taskNetworkInfo Queue
+				if (qFlush == 0 || i >= length - 10) // "i >= length - 10" for the last remaining elements in taskNetworkInfo Queue
 				{
 					while (taskNetworkInfo.TryDequeue(out var networkInfo))
 					{
