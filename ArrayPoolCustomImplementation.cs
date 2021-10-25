@@ -15,7 +15,7 @@ public class TimerNexSix
         TimerNexSix t = new();
         int taskListSize = 100;
         var tasks = new Task[taskListSize];
-        var semahore = new SemaphoreSlim(10);
+        var semaphore = new SemaphoreSlim(10);
         
         for (int i = 0; i < tasks.Length; i++)
 
@@ -24,7 +24,7 @@ public class TimerNexSix
             semahore.Wait();
 
             tasks[i] = Task.Run(() =>
-            { ReturnWith(t.list);  SharedMemory(bufferSize,semahore);});
+            { ReturnWith(t.list);  SharedMemory(bufferSize,semaphore);});
         }
 
         await Task.WhenAll(tasks);
