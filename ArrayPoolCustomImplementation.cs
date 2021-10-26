@@ -31,7 +31,7 @@ public class APCustom
 
     static int bufferSize = 30_000;
     readonly static WisconsinDriverLicenseInfo[] list;
-    static TimerNexSix()
+    static APCustom()
     { 
         list = GenerateLicenceObjects(bufferSize);
     }
@@ -41,7 +41,7 @@ public class APCustom
         WisconsinDLPool wisPoolObject = new();
         var pooledList = wisPoolObject.Rent(nItemAtATime).AsSpan(); // WisconsinDriverLicenseInfo[]
 
-        for (int i = 0; i < bufferSize; i++)
+        for (int i = 0; i < Size; i++)
         {
             pooledList[i].address = "Rize";
             pooledList[i].dateOfBirth = DateTime.Now;
