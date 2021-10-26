@@ -1,42 +1,38 @@
-// .Net6 implementation
-
 using System;
 using System.Buffers;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-namespace TimerNexSix;
-public class TimerNexSix
+namespace APCustomImplementation;
+
+public class APCustom
 {
-    static int count = 0;
 	static async Task Main()
-	{
-        
-        TimerNexSix t = new();
-        int taskListSize = 100;
-        var tasks = new Task[taskListSize];
-        var semaphore = new SemaphoreSlim(10);
-        
-        for (int i = 0; i < tasks.Length; i++)
-
-        {
-	    // prevent thread exhaustion! which is released in ShareMemory(int,SemaphoreSlim)
-            semahore.Wait();
-
-            tasks[i] = Task.Run(() =>
-            { ReturnWith(t.list);  SharedMemory(bufferSize,semaphore);});
-        }
-
-        await Task.WhenAll(tasks);
-        Console.Read();
+	{        
+        	int taskListSize = 100;
+        	var tasks = new Task[taskListSize];
+        	using (var semaphore_10 = new SemaphoreSlim(10))
+        	{
+        	    for (int i = 0; i < tasks.Length; i++)
+	
+        	    {
+			// this will be released in SharedMemory(int, SemaphoreSlim)
+        	        semaphore_10.Wait();
+	
+        	        tasks[i] = Task.Run(() =>
+        	        { ReturnWith(list); SharedMemory(bufferSize, semaphore_10); });
+        	    }
+        	}
+	
+        	await Task.WhenAll(tasks);
+        	Console.Read();
     }
 
     #region ArrayPoolAsync
 
-    static int bufferSize = 10_625;
-    WisconsinDriverLicenseInfo[] list;
-    public TimerNexSix()
-    {
+    static int bufferSize = 30_000;
+    readonly static WisconsinDriverLicenseInfo[] list;
+    static TimerNexSix()
+    { 
         list = GenerateLicenceObjects(bufferSize);
     }
 
@@ -65,10 +61,10 @@ public class TimerNexSix
         for (int i = 0; i < nItemAtATime; i++)
         {
             var listItem = pooledList[i];
-            if(listItem is not null)
-                 Console.WriteLine(listItem);
+            if (listItem is not null)
+                Console.WriteLine(listItem);
         }
-        
+
         semaphore.Release();
     }
 
@@ -109,7 +105,7 @@ public class TimerNexSix
         return wisconsinDLInfoArray;
     }
 
-    public static void ReturnWith(WisconsinDriverLicenseInfo[] wisconsinInfo)
+    public static void ReturnWith(in WisconsinDriverLicenseInfo[] wisconsinInfo)
     {
         WisconsinDLPool pool = new();
         pool.Return(wisconsinInfo);
