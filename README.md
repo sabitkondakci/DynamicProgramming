@@ -53,6 +53,7 @@
 - [Module Initializer & Static Constructor Alternative](https://github.com/SabitKondakci/DynamicProgramming/blob/main/ModuleInitializer.cs)
 - [MonitorTryEnter via Lock](https://github.com/SabitKondakci/DynamicProgramming/blob/main/MonitorTryEnter.cs)
 - [NQueen Problem In Detail](https://github.com/SabitKondakci/DynamicProgramming/blob/main/NQueenProblemInDetail.cs)
+- [Operator Overloading Full Implementation](https://github.com/SabitKondakci/DynamicProgramming/blob/main/OperatorOverloadingFull.cs)
 - [Parallel Aggregation Technique](https://github.com/SabitKondakci/DynamicProgramming/blob/main/ParallelAggregation.cs)
 - [Parallel Factorial Calculation](https://github.com/SabitKondakci/DynamicProgramming/blob/main/ParallelFactorialCalc.cs)
 - [Parallel Letter Frequency](https://github.com/SabitKondakci/DynamicProgramming/blob/main/ParallelLetterFrequency.cs)
