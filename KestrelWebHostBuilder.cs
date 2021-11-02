@@ -29,7 +29,8 @@ public class Program
            serverOptions.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(1);
            */
            
-           // visit the link for more detailed information : https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel?view=aspnetcore-2.2#listenoptionsprotocols
+           // visit the link for more detailed information:
+           // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel?view=aspnetcore-2.2#listenoptionsprotocols
 
        }).Build().Run();
     }
