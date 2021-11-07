@@ -35,6 +35,11 @@ async Task Main()
 		// even if you specify JsonNamingPolicy.CamelCase for the DictionaryKeyPolicy.
 		DictionaryKeyPolicy = JsonNamingPolicy.CamelCase, // customized dictionary keys
 		
+		//Allows comments within the JSON input and ignores them.
+		//The Utf8JsonReader behaves as if no comments are present.
+		ReadCommentHandling = JsonCommentHandling.Skip,
+		AllowTrailingCommas = true,
+		
 		Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
 		// by default enums are serialized as numbers
 		// by the help of JsonStringEnumConverter()
