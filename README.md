@@ -4,7 +4,7 @@
   
   <br/>
   
-  <p><strong>DynamicProgramming Repo</strong> - contains handy algorithms, spanning from shorthest path to async-semaphoreSlim</p>
+  <p><strong>DynamicProgramming Repo</strong> - contains handy algorithms, spanning from travelling salesman to async-semaphoreSlim</p>
   
   <h3> Designed via <strong>C#</strong> </h3>
   
