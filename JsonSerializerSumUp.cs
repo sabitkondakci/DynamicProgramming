@@ -29,6 +29,10 @@ async Task Main()
 		
 		// PropertyNamingPolicy = JsonNamingPolicy.CamelCase: built-in policy
 		
+		// The camel case naming policy for dictionary keys
+		// applies to serialization only.
+		// If you deserialize a dictionary, the keys will match the JSON file 
+		// even if you specify JsonNamingPolicy.CamelCase for the DictionaryKeyPolicy.
 		DictionaryKeyPolicy = JsonNamingPolicy.CamelCase, // customized dictionary keys
 		
 		Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
