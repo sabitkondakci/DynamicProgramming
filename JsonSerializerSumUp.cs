@@ -62,7 +62,7 @@ public class WareHouse : IStorage, ITempConditions
 	
 	[JsonPropertyName("KeyWords")] // overrides JsonNamingPolicy.CamelCase
 	
-	// default protected static readonly interface property.
+	// ITempConditions.DefaulttempKeyWords : default protected static readonly interface property.
 	public string[] TempKeyWords => ITempConditions.DefaultTempKeyWords; 
 	
 	[JsonInclude] // include fields, except static, const ones
