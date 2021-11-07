@@ -72,10 +72,10 @@ async Task Main()
 	
 	
 	// Using MemoryStream Buffer
-	// Serialize
 	await using (var memoryStream = new MemoryStream())
 	{
-
+		
+		// Serialize
 		await JsonSerializer.
 			SerializeAsync<WareHouse>(memoryStream, store, jsonOptions);
 				
