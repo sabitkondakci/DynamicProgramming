@@ -144,10 +144,3 @@ namespace HttpClientExtensionMethods
 		}
 	}
 }
-
-// Output:
-//Id: 1
-//Name: Tyler King
-//Username: Tyler
-//Email: Tyler @contoso.com
-//Success - Created
