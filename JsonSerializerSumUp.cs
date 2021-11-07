@@ -40,6 +40,11 @@ async Task Main()
 		ReadCommentHandling = JsonCommentHandling.Skip,
 		AllowTrailingCommas = true,
 		
+		// Writes numbers in string notation as "12"
+		NumberHandling =
+			JsonNumberHandling.AllowReadingFromString |
+					JsonNumberHandling.WriteAsString,
+		
 		Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
 		// by default enums are serialized as numbers
 		// by the help of JsonStringEnumConverter()
