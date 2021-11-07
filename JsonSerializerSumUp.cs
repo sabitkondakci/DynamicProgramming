@@ -23,7 +23,12 @@ async Task Main()
 	var jsonOptions = new JsonSerializerOptions()
 	{
 		WriteIndented = true, IgnoreReadOnlyProperties = true,
-		PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+		
+		//Custom Property Naming Policy
+		PropertyNamingPolicy = new LowerCaseNamingPolicy(),
+		
+		// PropertyNamingPolicy = JsonNamingPolicy.CamelCase: built-in policy
+		
 		Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
 		// by default enums are serialized as numbers
 		// by the help of JsonStringEnumConverter()
@@ -50,6 +55,12 @@ async Task Main()
 			DeserializeAsync<WareHouse>(memoStream,jsonOptions);
 		
 	
+}
+
+//Adding a Custom Property Naming Policy
+public class LowerCaseNamingPolicy : JsonNamingPolicy
+{
+	public override string ConvertName(string name) => name.ToLower();
 }
 
 public class WareHouse : IStorage, ITempConditions
