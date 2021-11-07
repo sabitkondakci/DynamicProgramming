@@ -61,7 +61,9 @@ public class WareHouse : IStorage, ITempConditions
 	public Dictionary<string,HighLowTempCelcius> TemperatureRanges {get;init;}
 	
 	[JsonPropertyName("KeyWords")] // overrides JsonNamingPolicy.CamelCase
-	public string[] TempKeyWords => ITempConditions.DefaultTempKeyWords; // default static interface field.
+	
+	// default protected static readonly interface property.
+	public string[] TempKeyWords => ITempConditions.DefaultTempKeyWords; 
 	
 	[JsonInclude] // include fields, except static, const ones
 	public byte OptimalTemp = 22;
