@@ -29,6 +29,8 @@ async Task Main()
 		
 		// PropertyNamingPolicy = JsonNamingPolicy.CamelCase: built-in policy
 		
+		DictionaryKeyPolicy = JsonNamingPolicy.CamelCase, // customized dictionary keys
+		
 		Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
 		// by default enums are serialized as numbers
 		// by the help of JsonStringEnumConverter()
