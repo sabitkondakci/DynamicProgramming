@@ -44,6 +44,7 @@
 - [IDisposable with SafeHandle Implementation](https://github.com/SabitKondakci/DynamicProgramming/blob/main/IDisposableSafeHandle.cs)
 - [Implicit Operator for Math.Pow(2,3) -> 2^3 = 8 ](https://github.com/SabitKondakci/DynamicProgramming/blob/main/ImplicitOperatorMathPow.cs)
 - [Job Sequencing & Deadline](https://github.com/SabitKondakci/DynamicProgramming/blob/main/JobSequencingDeadline.cs)
+- [JsonSerializer, All Subjects](https://github.com/SabitKondakci/DynamicProgramming/blob/main/JsonSerializerSumUp.cs)
 - [Kestrel WebHostBuilder HTTP/2 Setting](https://github.com/SabitKondakci/DynamicProgramming/blob/main/KestrelWebHostBuilder.cs)
 - [Knapsack](https://github.com/SabitKondakci/DynamicProgramming/blob/main/KnapsackAlgorithm.cs)
 - [Knuth - Morris - Prat ](https://github.com/SabitKondakci/DynamicProgramming/blob/main/KnuthMorrisPratAlgorithm.cs)
