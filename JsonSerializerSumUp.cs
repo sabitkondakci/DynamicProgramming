@@ -55,7 +55,8 @@ async Task Main()
 		}
 	};
 
-	#region FileStream
+#region FileStream
+	
 	var filePath = @"C:\Users\fenko\Desktop\WareHouse.json";
 	
 	// Serialize
@@ -70,10 +71,12 @@ async Task Main()
 	await using (FileStream fileStream = File.OpenRead(filePath))
 		wareObject = await JsonSerializer.
 			DeserializeAsync<WareHouse>(fileStream,jsonOptions);
-	#endregion
+	
+#endregion
 	
 	
-	#region MemoryStream
+#region MemoryStream
+	
 	await using (var memoryStream = new MemoryStream())
 	{
 		
@@ -92,7 +95,8 @@ async Task Main()
 		WareHouse wareObject = await JsonSerializer.
 			DeserializeAsync<WareHouse>(memoryStream, jsonOptions);
 	}
-	#endregion
+	
+#endregion
 	
 }
 
