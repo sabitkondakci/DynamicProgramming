@@ -58,37 +58,37 @@ async Task Main()
 	var filePath = @"C:\Users\fenko\Desktop\WareHouse.json";
 	
 	// Serialize
-	await using (FileStream stream = File.Create(filePath))
+	await using (FileStream fileStream = File.Create(filePath))
 		await JsonSerializer.
-			SerializeAsync<WareHouse>(stream, store, jsonOptions);
+			SerializeAsync<WareHouse>(fileStream, store, jsonOptions);
 	
 	string jsonScript = await File.ReadAllTextAsync(filePath);
 		
 	//Deserialize
 	WareHouse wareObject = null;
-	await using (FileStream memoStream = File.OpenRead(filePath))
+	await using (FileStream fileStream = File.OpenRead(filePath))
 		wareObject = await JsonSerializer.
-			DeserializeAsync<WareHouse>(memoStream,jsonOptions);
+			DeserializeAsync<WareHouse>(fileStream,jsonOptions);
 	
 	
 	// Using MemoryStream Buffer
 	// Serialize
-	await using (var stream = new MemoryStream())
+	await using (var memoryStream = new MemoryStream())
 	{
 
 		await JsonSerializer.
-			SerializeAsync<WareHouse>(stream, store, jsonOptions);
+			SerializeAsync<WareHouse>(memoryStream, store, jsonOptions);
 				
-		stream.Seek(0,SeekOrigin.Begin);
+		memoryStream.Seek(0,SeekOrigin.Begin);
 		
-		using var streamReader = new StreamReader(stream,Encoding.UTF8);
+		using var streamReader = new StreamReader(memoryStream,Encoding.UTF8);
 		var script = await streamReader.ReadToEndAsync();
 		
 		
 		//Deserialize
-		stream.Seek(0,SeekOrigin.Begin);
+		memoryStream.Seek(0,SeekOrigin.Begin);
 		WareHouse wareObject = await JsonSerializer.
-			DeserializeAsync<WareHouse>(stream, jsonOptions);
+			DeserializeAsync<WareHouse>(memoryStream, jsonOptions);
 	}
 		
 	
