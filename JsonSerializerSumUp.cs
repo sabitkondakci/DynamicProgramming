@@ -69,6 +69,27 @@ async Task Main()
 	await using (FileStream memoStream = File.OpenRead(filePath))
 		wareObject = await JsonSerializer.
 			DeserializeAsync<WareHouse>(memoStream,jsonOptions);
+	
+	
+	// Using MemoryStream Buffer
+	// Serialize
+	await using (var stream = new MemoryStream())
+	{
+
+		await JsonSerializer.
+			SerializeAsync<WareHouse>(stream, store, jsonOptions);
+				
+		stream.Seek(0,SeekOrigin.Begin);
+		
+		using var streamReader = new StreamReader(stream,Encoding.UTF8);
+		var script = await streamReader.ReadToEndAsync();
+		
+		
+		//Deserialize
+		stream.Seek(0,SeekOrigin.Begin);
+		WareHouse wareObject = await JsonSerializer.
+			DeserializeAsync<WareHouse>(stream, jsonOptions);
+	}
 		
 	
 }
