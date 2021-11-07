@@ -42,15 +42,13 @@ async Task Main()
 			SerializeAsync<WareHouse>(stream, store, jsonOptions);
 	
 	string jsonScript = await File.ReadAllTextAsync(filePath);
-	jsonScript.Dump();
-	
+		
 	//Deserialize
 	WareHouse wareObject = null;
 	await using (FileStream memoStream = File.OpenRead(filePath))
 		wareObject = await JsonSerializer.
 			DeserializeAsync<WareHouse>(memoStream,jsonOptions);
 		
-	wareObject.Dump();
 	
 }
 
