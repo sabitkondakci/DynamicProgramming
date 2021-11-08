@@ -6,7 +6,7 @@
   
   <p><strong>DynamicProgramming Repo</strong> - contains handy algorithms, spanning from travelling salesman to async-semaphoreSlim</p>
   
-  <h3> Designed via <strong>C#</strong> </h3>
+  <h3> Designed via <strong>C# .NET5+</strong> </h3>
   
   <br/>
   
