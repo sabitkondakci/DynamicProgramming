@@ -71,7 +71,7 @@ public static class JsonDOMExtensions
 }
 
 //sampleJson.json content:
-``` json {
+/* {
   "channel-version": "2.2",
   "latest-release": "2.2.8",
   "latest-release-date": "2019-11-19",
@@ -550,4 +550,5 @@ public static class JsonDOMExtensions
         "files": []
       }
     }
-```
+  }
+} */
