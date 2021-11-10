@@ -2,7 +2,8 @@ async Task Main()
 {
 	var options = new JsonWriterOptions
 	{
-		Indented = true
+		Indented = true,
+		Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin,UnicodeRanges.Arabic)
 	};
 	
 	// Provides methods to transform UTF-8
