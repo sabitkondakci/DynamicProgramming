@@ -10,6 +10,9 @@ async Task Main()
 		Indented = true,
 		Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin,UnicodeRanges.Arabic)
 			
+		//To minimize escaping you can use JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+		//Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+			
 		// An alternative is to specify individual characters that
 		// you want to allow through without being escaped.
 		// The following example serializes only the first two characters of жарко:
