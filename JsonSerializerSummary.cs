@@ -45,7 +45,7 @@ async Task Main()
 			JsonNumberHandling.AllowReadingFromString |
 					JsonNumberHandling.WriteAsString,
 		
-		Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+		Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin,UnicodeRanges.Arabic)
 		// by default enums are serialized as numbers
 		// by the help of JsonStringEnumConverter()
 		// this behaviour may change.
