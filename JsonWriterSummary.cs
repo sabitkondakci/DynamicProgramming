@@ -1,9 +1,19 @@
 async Task Main()
 {
+	
+	var encodeSettings = new TextEncoderSettings();
+	encodeSettings.AllowCharacters('\u0436', '\u0430');
+	encodeSettings.AllowRange(UnicodeRanges.BasicLatin);
+	
 	var options = new JsonWriterOptions
 	{
 		Indented = true,
 		Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin,UnicodeRanges.Arabic)
+			
+		// An alternative is to specify individual characters that
+		// you want to allow through without being escaped.
+		// The following example serializes only the first two characters of жарко:
+		//Encoder = JavaScriptEncoder.Create(encodeSettings)
 	};
 	
 	// Provides methods to transform UTF-8
