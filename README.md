@@ -46,6 +46,7 @@
 - [Job Sequencing & Deadline](https://github.com/SabitKondakci/DynamicProgramming/blob/main/JobSequencingDeadline.cs)
 - [JsonDOMExtension](https://github.com/SabitKondakci/DynamicProgramming/blob/main/JsonDOMExtension.cs)
 - [JsonSerializer, All Subjects](https://github.com/SabitKondakci/DynamicProgramming/blob/main/JsonSerializerSumUp.cs)
+- [JsonWriter, Topic Summary](https://github.com/SabitKondakci/DynamicProgramming/blob/main/JsonWriterSummary.cs)
 - [Kestrel WebHostBuilder HTTP/2 Setting](https://github.com/SabitKondakci/DynamicProgramming/blob/main/KestrelWebHostBuilder.cs)
 - [Knapsack](https://github.com/SabitKondakci/DynamicProgramming/blob/main/KnapsackAlgorithm.cs)
 - [Knuth - Morris - Prat ](https://github.com/SabitKondakci/DynamicProgramming/blob/main/KnuthMorrisPratAlgorithm.cs)
