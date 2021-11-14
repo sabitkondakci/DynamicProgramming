@@ -109,7 +109,7 @@ await using (var stream = new MemoryStream())
         Console.WriteLine($"Hot.High = {temperatureRanges["Warm"].High}");
 
         JsonArray? jArray = jObject["DatesAvailable"]?.AsArray();
-        Console.WriteLine($"First Date = {jArray?[0]}");
+        Console.WriteLine($"First Date = {jArray?[0]?.GetValue<DateTime>()}");
 
     }
 }
