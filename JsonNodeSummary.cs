@@ -33,6 +33,15 @@ JsonNode? jsonNode =
     await Task.Run<JsonNode?>( () => JsonNode.Parse(jsonString));
 
 // Console.WriteLine(jsonNode?.ToJsonString(options));
+// JsonNode is mutable!
+jsonNode!["TemperatureRanges"] = new JsonObject()
+{
+    ["Chill"] = new JsonObject()
+    {
+        ["High"] = 22,
+        ["Low"] = 5
+    }
+};
 
 JsonNode? temperature = jsonNode?["TemperatureRanges"];
 // Console.WriteLine(temperature?.ToJsonString());
