@@ -1,3 +1,4 @@
+// .Net6 Console Template
 string jsonString =
 @"
 {
