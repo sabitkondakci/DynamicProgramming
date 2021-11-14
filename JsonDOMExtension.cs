@@ -27,16 +27,47 @@ async Task Main()
 			return false;
 		});
 
-		foreach (var jsonElement in enumeratedList)
-		{				
-			var runtimeFiles = jsonElement.
-				Pull("runtime:files")?.
-					EnumerateArray() ?? default(JsonElement.ArrayEnumerator);
+		var jsonWriterOptions = new JsonWriterOptions
+		{
+			Indented = true,
+			SkipValidation = true
+		};
+
+		await using (var stream = new MemoryStream())
+		{
+			var streamReader = new StreamReader(stream);
+			var jsonWriter = new Utf8JsonWriter(stream, jsonWriterOptions);
 			
-			foreach (JsonElement file in runtimeFiles)
+			foreach (var jsonElement in enumeratedList)
 			{
-				file.Pull("name")?.GetString().Dump();
+				
+				
+				jsonElement.WriteTo(jsonWriter);
+
+
+				string result = string.Empty;
+				
+				streamReader.BaseStream.Position = 0;
+				result = await streamReader.ReadToEndAsync();
+				
+
+				result.OnDemand().Dump();
+
+				var runtimeFiles = jsonElement.
+					Pull("sdk:files")?.
+						EnumerateArray() ?? default(JsonElement.ArrayEnumerator);
+				
+				await jsonWriter.FlushAsync();
+				foreach (JsonElement file in runtimeFiles)
+				{
+					var script = file.Pull("name")?.GetString();
+					script.Dump();
+				}
+				
 			}
+			
+			await jsonWriter.DisposeAsync();
+			streamReader.Dispose();
 		}
 		
 	}
