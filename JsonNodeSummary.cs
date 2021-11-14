@@ -37,9 +37,9 @@ JsonNode? jsonNode =
 JsonNode? temperature = jsonNode?["TemperatureRanges"];
 // Console.WriteLine(temperature?.ToJsonString());
 
-JsonNode? datesAvalilable = jsonNode?["TemperatureRanges"];
+JsonNode? datesAvalilable = jsonNode?["DatesAvailable"];
 JsonNode? firstElement =
-    datesAvalilable!.GetType() == typeof(JsonArray) ? datesAvalilable?[1] : default(JsonNode) ;
+    datesAvalilable!.GetType() == typeof(JsonArray) ? datesAvalilable?[0] : default(JsonNode) ;
 // Console.WriteLine(firstElement?.GetValue<DateTime>());
 
 var jsonNodeOptions = new JsonNodeOptions()
