@@ -6,23 +6,24 @@ async Task Main()
 {
 	var store = new WareHouse()
 	{
-		BrandName = "Muggy",
-		Amount = 1200,
-		PurchaseDate = DateTime.Parse("2021-10-13".AsSpan()),
+		BrandName = @"Muggy\",
+		Amount = 1200.335433, // rounds to 1200.34
+		PurchaseDate = new DateTime(2021,10,29),
 		
 		TemperatureRanges = new Dictionary<string, HighLowTempCelcius>
 		{
 			["Cold"] = new HighLowTempCelcius { High = 20, Low = -10 },
 			["Hot"] = new HighLowTempCelcius { High = 35, Low = 21 },
-			["Heat Wave"] = new HighLowTempCelcius { High = 60, Low = 36 },
+			["Humid"] = new HighLowTempCelcius { High = 60, Low = 36 },
 		},
 		
 		ItemCategory = Category.Home_Gadget
 	}; 
-	
+
 	var jsonOptions = new JsonSerializerOptions()
 	{
-		WriteIndented = true, IgnoreReadOnlyProperties = true,
+		WriteIndented = true,
+		IgnoreReadOnlyProperties = true,
 		
 		//Custom Property Naming Policy
 		PropertyNamingPolicy = new LowerCaseNamingPolicy(),
@@ -33,70 +34,54 @@ async Task Main()
 		// applies to serialization only.
 		// If you deserialize a dictionary, the keys will match the JSON file 
 		// even if you specify JsonNamingPolicy.CamelCase for the DictionaryKeyPolicy.
-		DictionaryKeyPolicy = JsonNamingPolicy.CamelCase, // customized dictionary keys
+		DictionaryKeyPolicy = new UpperCaseNamingPolicy(),
 		
 		//Allows comments within the JSON input and ignores them.
 		//The Utf8JsonReader behaves as if no comments are present.
 		ReadCommentHandling = JsonCommentHandling.Skip,
 		AllowTrailingCommas = true,
+		DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
 		
 		// Writes numbers in string notation as "12"
 		NumberHandling =
 			JsonNumberHandling.AllowReadingFromString |
 					JsonNumberHandling.WriteAsString,
-		
-		Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin,UnicodeRanges.Arabic)
+
+		Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
 		// by default enums are serialized as numbers
 		// by the help of JsonStringEnumConverter()
 		// this behaviour may change.
 		Converters =
 		{
-			new JsonStringEnumConverter() //JsonNamingPolicy is optional
+			new JsonStringEnumConverter(), //JsonNamingPolicy is optional
+			new DateTimeOnlyDateConverter_Turkey(),
+			new RoundFractionConverter()
 		}
 	};
-
-#region FileStream
 	
-	var filePath = @"C:\Users\fenko\Desktop\WareHouse.json";
-	
-	// Serialize
-	await using (FileStream fileStream = File.Create(filePath))
-		await JsonSerializer.
-			SerializeAsync<WareHouse>(fileStream, store, jsonOptions);
-	
-	string jsonScript = await File.ReadAllTextAsync(filePath);
-		
-	//Deserialize
-	WareHouse wareObject = null;
-	await using (FileStream fileStream = File.OpenRead(filePath))
-		wareObject = await JsonSerializer.
-			DeserializeAsync<WareHouse>(fileStream,jsonOptions);
-	
-#endregion
-	
-	
-#region MemoryStream
-	
-	await using (var memoryStream = new MemoryStream())
+	await using (var stream = new MemoryStream())
 	{
 		
 		// Serialize
 		await JsonSerializer.
-			SerializeAsync<WareHouse>(memoryStream, store, jsonOptions);
-				
-		memoryStream.Seek(0,SeekOrigin.Begin);
+			SerializeAsync<WareHouse>(stream, store, jsonOptions);
 		
-		using var streamReader = new StreamReader(memoryStream,Encoding.UTF8);
+		stream.Seek(0,SeekOrigin.Begin);
+
+		using var streamReader = new StreamReader(stream,Encoding.UTF8,
+			false,stream.Capacity);
+					
 		var script = await streamReader.ReadToEndAsync();
-		
-		
+		script.Dump();
+				
 		//Deserialize
-		memoryStream.Seek(0,SeekOrigin.Begin);
+		stream.Seek(0,SeekOrigin.Begin);
+		
 		WareHouse wareObject = await JsonSerializer.
-			DeserializeAsync<WareHouse>(memoryStream, jsonOptions);
+			DeserializeAsync<WareHouse>(stream,jsonOptions);
+
+		wareObject.Dump();
 	}
-	
-#endregion
 	
 }
 
@@ -106,23 +91,41 @@ public class LowerCaseNamingPolicy : JsonNamingPolicy
 	public override string ConvertName(string name) => name.ToLower();
 }
 
+// Dictionay Key Policy
+public class UpperCaseNamingPolicy : JsonNamingPolicy
+{
+	public override string ConvertName(string name) => name.ToUpper();
+}
+
 public class WareHouse : IStorage, ITempConditions
 {
+	[JsonIgnore]
 	public int ItemId { get; }
-	public string BrandName { get; init; }
-	public ulong Amount { get; init; }
-	public DateTime PurchaseDate { get; init; }
-	public Dictionary<string,HighLowTempCelcius> TemperatureRanges {get;init;}
+	public string BrandName { get; set; }
+	public double Amount { get; set; }
+	public DateTime PurchaseDate { get; set; }
+	public Dictionary<string,HighLowTempCelcius> TemperatureRanges {get;set;}
 	
 	[JsonPropertyName("KeyWords")] // overrides JsonNamingPolicy.CamelCase
-	
-	// ITempConditions.DefaulttempKeyWords : default protected static readonly interface property.
-	public string[] TempKeyWords => ITempConditions.DefaultTempKeyWords; 
+	public string[] TempKeyWords => ITempConditions.DefaultTempKeyWords;
 	
 	[JsonInclude] // include fields, except static, const ones
 	public byte OptimalTemp = 22;
-	public Category ItemCategory {get;init;}
-	
+	public Category ItemCategory {get;set;}
+	public string ItemCategoryString(Category category)
+	{
+		return category switch 
+		{
+			Category.Tool => nameof(Category.Tool),
+			Category.Hygene => nameof(Category.Hygene),
+			Category.Home_Gadget => nameof(Category.Home_Gadget),
+			Category.Food => nameof(Category.Food),
+			Category.Electronic_Material => nameof(Category.Electronic_Material),
+			Category.Car_Spare_Part => nameof(Category.Car_Spare_Part),
+			Category.Bike_Spare_Part => nameof(Category.Bike_Spare_Part),
+			_ => nameof(Category.None)
+		};
+	}
 }
 
 public enum Category 
@@ -144,14 +147,14 @@ interface IStorage
 	protected static readonly int LargeSize = 1_000_000;
 
 	public int ItemId { get; }
-	public string BrandName { get; init; }
-	public ulong Amount { get; init; }
-	public DateTime PurchaseDate { get; init; }
+	public string BrandName { get; set; }
+	public double Amount { get; set; }
+	public DateTime PurchaseDate { get; set; }
 }
 
 interface ITempConditions
 {
-	public Dictionary<string, HighLowTempCelcius> TemperatureRanges { get; init; }
+	public Dictionary<string, HighLowTempCelcius> TemperatureRanges { get; set; }
 	protected static string[] DefaultTempKeyWords => new[] { "Cold", "Humid", "Hot"};
 }
 
@@ -159,6 +162,51 @@ public struct HighLowTempCelcius
 {
 	public int High { get; init; }
 	public int Low { get; init; }
+}
+
+public class DateTimeOnlyDateConverter_Turkey : JsonConverter<DateTime>
+{
+	public override DateTime 
+		Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+	{
+		CultureInfo culture = new CultureInfo("tr-TR");
+		
+		if(typeToConvert == typeof(DateTime))
+			return DateTime.Parse(reader.GetString(),culture);
+		
+		return new DateTime();
+	}
+
+	public override void
+		Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
+	{
+		var year = value.Year;
+		var month = value.Month;
+		var day = value.Day;
+
+		var date = $"{day}/{month}/{year}"; // DateTime format in Turkey
+		writer.WriteStringValue(date);
+	}
+}
+
+
+
+public class RoundFractionConverter : JsonConverter<double>
+{
+	public override double 
+		Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+	{
+		if(typeToConvert == typeof(double))
+			return Math.Round(reader.GetDouble(),2);
+		
+		return default(double);
+	}
+
+	public override void 
+		Write(Utf8JsonWriter writer, double value, JsonSerializerOptions options)
+	{
+		writer.WriteNumberValue(Math.Round(value,2));
+	}
 }
 
 
