@@ -16,12 +16,22 @@ async Task Main()
 		},
 		
 		PurchaseDate = new DateTime(2021,10,29),
-		
 		TemperatureRanges = new Dictionary<string, HighLowTempCelcius>
 		{
 			["Cold"] = new HighLowTempCelcius { High = 20, Low = -10 },
 			["Hot"] = new HighLowTempCelcius { High = 35, Low = 21 },
 			["Humid"] = new HighLowTempCelcius { High = 60, Low = 36 },
+		},
+		
+		// JsonElement issue has been solved by
+		// new DictionaryStringObjectJsonConverter() implementation
+		DummyElement = new Dictionary<string,object>
+		{
+			["Bool"] = true,
+			["Null"] = null,
+			["Text"] = "String",
+			["Number"] = 332.44,
+			["Integer"] = 342
 		},
 		
 		ItemCategory = Category.Home_Gadget
@@ -62,6 +72,7 @@ async Task Main()
 		{
 			new JsonStringEnumConverter(), //JsonNamingPolicy is optional
 			new DateTimeOnlyDateConverter_Turkey(),	
+			new DictionaryStringObjectJsonConverter()
 		}
 	};
 	
@@ -79,7 +90,7 @@ async Task Main()
 					
 		var script = await streamReader.ReadToEndAsync();
 		script.Dump();
-				
+		
 		//Deserialize
 		stream.Seek(0,SeekOrigin.Begin);
 		
@@ -113,13 +124,15 @@ public class WareHouse : IStorage, ITempConditions
 	[JsonConverter(typeof(RoundFractionConverter))]
 	public Dictionary<string,double> Price {get;set;}
 	
+	public Dictionary<string,object> DummyElement {get;set;}
+	
 	public DateTime PurchaseDate { get; set; }
 	public Dictionary<string,HighLowTempCelcius> TemperatureRanges {get;set;}
 	
 	[JsonPropertyName("KeyWords")] // overrides JsonNamingPolicy.CamelCase
 	public string[] TempKeyWords => ITempConditions.DefaultTempKeyWords;
 	
-	[JsonInclude] // include fields, except static, const ones
+	//[JsonInclude] // include fields, except static, const ones
 	public byte OptimalTemp = 22;
 	public Category ItemCategory {get;set;}
 	public string ItemCategoryString(Category category)
@@ -199,11 +212,11 @@ public class DateTimeOnlyDateConverter_Turkey : JsonConverter<DateTime>
 	}
 }
 
-
-
 public class RoundFractionConverter : JsonConverter<Dictionary<string, double>>
 {
-	public override Dictionary<string, double> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+	public override Dictionary<string, double> 
+		Read(ref Utf8JsonReader reader, 
+			Type typeToConvert, JsonSerializerOptions options)
 	{
 		if (reader.TokenType != JsonTokenType.StartObject)
 		{
@@ -232,13 +245,15 @@ public class RoundFractionConverter : JsonConverter<Dictionary<string, double>>
 			}
 
 			reader.Read();
-			dictionary.Add(propertyName, GetDictValue(ref reader, options));
+			dictionary.Add(propertyName, GetRoundDictValue(ref reader, options));
 		}
 
 		return dictionary;
 	}
 
-	public override void Write(Utf8JsonWriter writer, Dictionary<string, double> value, JsonSerializerOptions options)
+	public override void 
+		Write(Utf8JsonWriter writer, 
+			Dictionary<string, double> value, JsonSerializerOptions options)
 	{
 		writer.WriteStartObject();
 			writer.WriteNumber("Max",Math.Round(value["Max"],2));
@@ -248,7 +263,8 @@ public class RoundFractionConverter : JsonConverter<Dictionary<string, double>>
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private double GetDictValue(ref Utf8JsonReader reader, JsonSerializerOptions options)
+	private double 
+		GetRoundDictValue(ref Utf8JsonReader reader, JsonSerializerOptions options)
 	{
 		if(reader.TokenType == JsonTokenType.Number)
 		{
@@ -259,6 +275,154 @@ public class RoundFractionConverter : JsonConverter<Dictionary<string, double>>
 		return default(double);
 	}
 }
+
+public class DictionaryStringObjectJsonConverter : JsonConverter<Dictionary<string, object>>
+{
+	public override Dictionary<string, object> 
+		Read(ref Utf8JsonReader reader, 
+			Type typeToConvert, JsonSerializerOptions options)
+	{
+		if (reader.TokenType != JsonTokenType.StartObject)
+		{
+			throw new JsonException($"JsonTokenType was of type {reader.TokenType}, only objects are supported");
+		}
+
+		var dictionary = new Dictionary<string, object>();
+		while (reader.Read())
+		{
+			if (reader.TokenType == JsonTokenType.EndObject)
+			{
+				return dictionary;
+			}
+
+			if (reader.TokenType != JsonTokenType.PropertyName)
+			{
+				throw new JsonException("JsonTokenType was not PropertyName");
+			}
+
+			var propertyName = reader.GetString();
+
+			if (string.IsNullOrWhiteSpace(propertyName))
+			{
+				throw new JsonException("Failed to get property name");
+			}
+
+			reader.Read();
+			dictionary.Add(propertyName, ExtractValue(ref reader, options));
+		}
+
+		return dictionary;
+	}
+
+	public override void Write(Utf8JsonWriter writer, Dictionary<string, object> value, JsonSerializerOptions options)
+{
+    writer.WriteStartObject();
+
+		foreach (var key in value.Keys)
+		{
+			HandleValue(writer, key, value[key]);
+		}
+
+		writer.WriteEndObject();
+	}
+
+	private static void HandleValue(Utf8JsonWriter writer, string key, object objectValue)
+	{
+		if (key != null)
+		{
+			writer.WritePropertyName(key);
+		}
+
+		switch (objectValue)
+		{
+			case string stringValue:
+				writer.WriteStringValue(stringValue);
+				break;
+			case DateTime dateTime:
+				writer.WriteStringValue(dateTime);
+				break;
+			case long longValue:
+				writer.WriteNumberValue(longValue);
+				break;
+			case int intValue:
+				writer.WriteNumberValue(intValue);
+				break;
+			case float floatValue:
+				writer.WriteNumberValue(floatValue);
+				break;
+			case double doubleValue:
+				writer.WriteNumberValue(doubleValue);
+				break;
+			case decimal decimalValue:
+				writer.WriteNumberValue(decimalValue);
+				break;
+			case bool boolValue:
+				writer.WriteBooleanValue(boolValue);
+				break;
+			case Dictionary<string, object> dict:
+				writer.WriteStartObject();
+				foreach (var item in dict)
+				{
+					HandleValue(writer, item.Key, item.Value);
+				}
+				writer.WriteEndObject();
+				break;
+			case object[] array:
+				writer.WriteStartArray();
+				foreach (var item in array)
+				{
+					HandleValue(writer, item);
+				}
+				writer.WriteEndArray();
+				break;
+			default:
+				writer.WriteNullValue();
+				break;
+		}
+	}
+
+	private static void HandleValue(Utf8JsonWriter writer, object value)
+	{
+		HandleValue(writer, null, value);
+	}
+
+	private object ExtractValue(ref Utf8JsonReader reader, JsonSerializerOptions options)
+	{
+		switch (reader.TokenType)
+		{
+			case JsonTokenType.String:
+				if (reader.TryGetDateTime(out var date))
+				{
+					return date;
+				}
+				return reader.GetString();
+			case JsonTokenType.False:
+				return false;
+			case JsonTokenType.True:
+				return true;
+			case JsonTokenType.Null:
+				return null;
+			case JsonTokenType.Number:
+				if (reader.TryGetInt64(out var result))
+				{
+					return result;
+				}
+				return reader.GetDecimal();
+			case JsonTokenType.StartObject:
+				return Read(ref reader, null, options);
+			case JsonTokenType.StartArray:
+				var list = new List<object>();
+				while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+				{
+					list.Add(ExtractValue(ref reader, options));
+				}
+				return list;
+			default:
+				throw new JsonException($"'{reader.TokenType}' is not supported");
+		}
+	}
+}
+
 
 
 
