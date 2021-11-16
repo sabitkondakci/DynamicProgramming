@@ -232,11 +232,7 @@ public class RoundFractionConverter : JsonConverter<Dictionary<string, double>>
 			}
 
 			reader.Read();
-			
-			if(propertyName == "Max" || propertyName == "Min")
-				dictionary.Add(propertyName, GetDictValue(ref reader, options));
-			else
-				dictionary.Add(propertyName,reader.GetDouble());
+			dictionary.Add(propertyName, GetDictValue(ref reader, options));
 		}
 
 		return dictionary;
