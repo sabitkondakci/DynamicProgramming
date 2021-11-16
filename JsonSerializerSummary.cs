@@ -232,7 +232,7 @@ public class RoundFractionConverter : JsonConverter<Dictionary<string, double>>
 			reader.Read();
 			
 			if(propertyName == "Max" || propertyName == "Min")
-				dictionary.Add(propertyName, ExtractValue(ref reader, options));
+				dictionary.Add(propertyName, GetDictValue(ref reader, options));
 			else
 				dictionary.Add(propertyName,reader.GetDouble());
 		}
@@ -250,7 +250,7 @@ public class RoundFractionConverter : JsonConverter<Dictionary<string, double>>
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private double ExtractValue(ref Utf8JsonReader reader, JsonSerializerOptions options)
+	private double GetDictValue(ref Utf8JsonReader reader, JsonSerializerOptions options)
 	{
 		if(reader.TokenType == JsonTokenType.Number)
 		{
@@ -261,7 +261,6 @@ public class RoundFractionConverter : JsonConverter<Dictionary<string, double>>
 		return default(double);
 	}
 }
-
 
 
 
