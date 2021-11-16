@@ -36,7 +36,11 @@ async Task Main()
 		
 		ItemCategory = Category.Home_Gadget
 	}; 
-
+	
+	// JsonSerializerDefaults.Web Default Options
+	// PropertyNameCaseInsensitive = true
+	// JsonNamingPolicy = CamelCase
+	// NumberHandling = AllowReadingFromString
 	var jsonOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web)
 	{
 		WriteIndented = true,
