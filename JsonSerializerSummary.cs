@@ -7,7 +7,14 @@ async Task Main()
 	var store = new WareHouse()
 	{
 		BrandName = @"Muggy\",
-		Amount = 1200.335433, // rounds to 1200.34
+		Amount = 1200,
+		
+		Price = new Dictionary<string,double>
+		{
+			["Max"] = 1244.33442,
+			["Min"] = 988.4323
+		},
+		
 		PurchaseDate = new DateTime(2021,10,29),
 		
 		TemperatureRanges = new Dictionary<string, HighLowTempCelcius>
@@ -103,6 +110,7 @@ public class WareHouse : IStorage, ITempConditions
 	public int ItemId { get; }
 	public string BrandName { get; set; }
 	public double Amount { get; set; }
+	public Dictionary<string,double> Price {get;set;}
 	public DateTime PurchaseDate { get; set; }
 	public Dictionary<string,HighLowTempCelcius> TemperatureRanges {get;set;}
 	
@@ -191,23 +199,70 @@ public class DateTimeOnlyDateConverter_Turkey : JsonConverter<DateTime>
 
 
 
-public class RoundFractionConverter : JsonConverter<double>
+public class RoundFractionConverter : JsonConverter<Dictionary<string, double>>
 {
-	public override double 
-		Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+	public override Dictionary<string, double> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 	{
-		if(typeToConvert == typeof(double))
-			return Math.Round(reader.GetDouble(),2);
+		if (reader.TokenType != JsonTokenType.StartObject)
+		{
+			throw new JsonException($"JsonTokenType was of type {reader.TokenType}, only objects are supported");
+		}
+
+		var dictionary = new Dictionary<string, double>();
+		
+		while (reader.Read())
+		{
+			if (reader.TokenType == JsonTokenType.EndObject)
+			{
+				return dictionary;
+			}
+
+			if (reader.TokenType != JsonTokenType.PropertyName)
+			{
+				throw new JsonException("JsonTokenType was not PropertyName");
+			}
+
+			var propertyName = reader.GetString();
+
+			if (string.IsNullOrWhiteSpace(propertyName))
+			{
+				throw new JsonException("Failed to get property name");
+			}
+
+			reader.Read();
+			
+			if(propertyName == "Max" || propertyName == "Min")
+				dictionary.Add(propertyName, ExtractValue(ref reader, options));
+			else
+				dictionary.Add(propertyName,reader.GetDouble());
+		}
+
+		return dictionary;
+	}
+
+	public override void Write(Utf8JsonWriter writer, Dictionary<string, double> value, JsonSerializerOptions options)
+	{
+		writer.WriteStartObject();
+			writer.WriteNumber("Max",Math.Round(value["Max"],2));
+			writer.WriteNumber("Min",Math.Round(value["Min"],2));
+		writer.WriteEndObject();
+		writer.Flush();
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	private double ExtractValue(ref Utf8JsonReader reader, JsonSerializerOptions options)
+	{
+		if(reader.TokenType == JsonTokenType.Number)
+		{
+			double value = reader.GetDouble();
+			return Math.Round(value,2);
+		}
 		
 		return default(double);
 	}
-
-	public override void 
-		Write(Utf8JsonWriter writer, double value, JsonSerializerOptions options)
-	{
-		writer.WriteNumberValue(Math.Round(value,2));
-	}
 }
+
+
 
 
 // HttpClient GetFromJsonAsync<T>(requestUri)
