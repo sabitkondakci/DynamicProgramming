@@ -37,7 +37,7 @@ async Task Main()
 		ItemCategory = Category.Home_Gadget
 	}; 
 
-	var jsonOptions = new JsonSerializerOptions()
+	var jsonOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web)
 	{
 		WriteIndented = true,
 		IgnoreReadOnlyProperties = true,
