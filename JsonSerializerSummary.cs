@@ -61,8 +61,7 @@ async Task Main()
 		Converters =
 		{
 			new JsonStringEnumConverter(), //JsonNamingPolicy is optional
-			new DateTimeOnlyDateConverter_Turkey(),
-			new RoundFractionConverter()
+			new DateTimeOnlyDateConverter_Turkey(),	
 		}
 	};
 	
@@ -110,7 +109,10 @@ public class WareHouse : IStorage, ITempConditions
 	public int ItemId { get; }
 	public string BrandName { get; set; }
 	public double Amount { get; set; }
+	
+	[JsonConverter(typeof(RoundFractionConverter))]
 	public Dictionary<string,double> Price {get;set;}
+	
 	public DateTime PurchaseDate { get; set; }
 	public Dictionary<string,HighLowTempCelcius> TemperatureRanges {get;set;}
 	
