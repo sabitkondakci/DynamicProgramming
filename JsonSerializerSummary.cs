@@ -193,6 +193,7 @@ public struct HighLowTempCelcius
 	public int Low { get; init; }
 }
 
+// Converter Override Order:
 // [JsonConverter] applied to a property.
 // A converter added to the Converters collection.
 // [JsonConverter] applied to a custom value type or POCO.
