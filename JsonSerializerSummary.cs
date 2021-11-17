@@ -15,6 +15,9 @@ async Task Main()
 			["Min"] = 988.4323
 		},
 		
+		// Fahrenheit or Celsius
+		Temp = new Temperature(80,celsius:false),
+		
 		PurchaseDate = new DateTime(2021,10,29),
 		TemperatureRanges = new Dictionary<string, HighLowTempCelcius>
 		{
@@ -30,17 +33,13 @@ async Task Main()
 			["Bool"] = true,
 			["Null"] = null,
 			["Text"] = "String",
-			["Number"] = 332.44,
+			["Double"] = 332.44,
 			["Integer"] = 342
 		},
 		
 		ItemCategory = Category.Home_Gadget
 	}; 
-	
-	// JsonSerializerDefaults.Web Default Options
-	// PropertyNameCaseInsensitive = true
-	// JsonNamingPolicy = CamelCase
-	// NumberHandling = AllowReadingFromString
+
 	var jsonOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web)
 	{
 		WriteIndented = true,
@@ -136,7 +135,7 @@ public class WareHouse : IStorage, ITempConditions
 	[JsonPropertyName("KeyWords")] // overrides JsonNamingPolicy.CamelCase
 	public string[] TempKeyWords => ITempConditions.DefaultTempKeyWords;
 	
-	//[JsonInclude] // include fields, except static, const ones
+	[JsonInclude] // include fields, except static, const ones
 	public byte OptimalTemp = 22;
 	public Category ItemCategory {get;set;}
 	public string ItemCategoryString(Category category)
@@ -153,6 +152,8 @@ public class WareHouse : IStorage, ITempConditions
 			_ => nameof(Category.None)
 		};
 	}
+	
+	public Temperature Temp {get;set;}
 }
 
 public enum Category 
@@ -183,12 +184,58 @@ interface ITempConditions
 {
 	public Dictionary<string, HighLowTempCelcius> TemperatureRanges { get; set; }
 	protected static string[] DefaultTempKeyWords => new[] { "Cold", "Humid", "Hot"};
+	
 }
 
 public struct HighLowTempCelcius
 {
 	public int High { get; init; }
 	public int Low { get; init; }
+}
+
+// [JsonConverter] applied to a property.
+// A converter added to the Converters collection.
+// [JsonConverter] applied to a custom value type or POCO.
+[JsonConverter(typeof(TemperatureConverter))]
+public struct Temperature
+{
+	public Temperature(double degrees, bool celsius)
+	{	
+		Degrees = degrees;
+		IsCelsius = celsius;
+		Celcius = celsius ? degrees : Math.Round((degrees - 32)/1.8,2);
+	}
+
+	public double Degrees { get;}
+	public double Celcius { get;}
+	public bool IsCelsius { get; }
+	public bool IsFahrenheit => !IsCelsius;
+
+	public override string ToString() =>
+		$"{Degrees}{(IsCelsius ? "C" : "F")}";
+
+	public static Temperature Parse(string input)
+	{
+		double degrees = int.Parse(input[..^1]);
+		bool celsius = input[^1] == 'C';
+
+		return new Temperature(degrees, celsius);
+	}
+}
+
+public class TemperatureConverter : JsonConverter<Temperature>
+{
+	public override Temperature Read(
+		ref Utf8JsonReader reader,
+		Type typeToConvert,
+		JsonSerializerOptions options) => 
+			Temperature.Parse(reader.GetString());
+
+	public override void Write(
+		Utf8JsonWriter writer,
+		Temperature temperature,
+		JsonSerializerOptions options) => 
+			writer.WriteStringValue(temperature.ToString());
 }
 
 public class DateTimeOnlyDateConverter_Turkey : JsonConverter<DateTime>
@@ -292,6 +339,7 @@ public class DictionaryStringObjectJsonConverter : JsonConverter<Dictionary<stri
 		}
 
 		var dictionary = new Dictionary<string, object>();
+		
 		while (reader.Read())
 		{
 			if (reader.TokenType == JsonTokenType.EndObject)
@@ -319,8 +367,8 @@ public class DictionaryStringObjectJsonConverter : JsonConverter<Dictionary<stri
 	}
 
 	public override void Write(Utf8JsonWriter writer, Dictionary<string, object> value, JsonSerializerOptions options)
-{
-    writer.WriteStartObject();
+	{
+    	writer.WriteStartObject();
 
 		foreach (var key in value.Keys)
 		{
@@ -333,10 +381,8 @@ public class DictionaryStringObjectJsonConverter : JsonConverter<Dictionary<stri
 	private static void HandleValue(Utf8JsonWriter writer, string key, object objectValue)
 	{
 		if (key != null)
-		{
 			writer.WritePropertyName(key);
-		}
-
+	
 		switch (objectValue)
 		{
 			case string stringValue:
@@ -395,11 +441,12 @@ public class DictionaryStringObjectJsonConverter : JsonConverter<Dictionary<stri
 		switch (reader.TokenType)
 		{
 			case JsonTokenType.String:
+			
 				if (reader.TryGetDateTime(out var date))
-				{
 					return date;
-				}
+				
 				return reader.GetString();
+				
 			case JsonTokenType.False:
 				return false;
 			case JsonTokenType.True:
@@ -407,20 +454,22 @@ public class DictionaryStringObjectJsonConverter : JsonConverter<Dictionary<stri
 			case JsonTokenType.Null:
 				return null;
 			case JsonTokenType.Number:
+			
 				if (reader.TryGetInt64(out var result))
-				{
 					return result;
-				}
+				
 				return reader.GetDecimal();
+				
 			case JsonTokenType.StartObject:
 				return Read(ref reader, null, options);
 			case JsonTokenType.StartArray:
+			
 				var list = new List<object>();
 				while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
-				{
 					list.Add(ExtractValue(ref reader, options));
-				}
+				
 				return list;
+				
 			default:
 				throw new JsonException($"'{reader.TokenType}' is not supported");
 		}
