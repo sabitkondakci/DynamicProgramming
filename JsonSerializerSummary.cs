@@ -102,20 +102,8 @@ async Task Main()
 
 		wareObject.Dump();
 	}
-	
 }
 
-//Adding a Custom Property Naming Policy
-public class LowerCaseNamingPolicy : JsonNamingPolicy
-{
-	public override string ConvertName(string name) => name.ToLower();
-}
-
-// Dictionay Key Policy
-public class UpperCaseNamingPolicy : JsonNamingPolicy
-{
-	public override string ConvertName(string name) => name.ToUpper();
-}
 
 public class WareHouse : IStorage, ITempConditions
 {
@@ -183,8 +171,8 @@ interface IStorage
 interface ITempConditions
 {
 	public Dictionary<string, HighLowTempCelcius> TemperatureRanges { get; set; }
+	public Temperature Temp {get;set;}
 	protected static string[] DefaultTempKeyWords => new[] { "Cold", "Humid", "Hot"};
-	
 }
 
 public struct HighLowTempCelcius
@@ -193,7 +181,18 @@ public struct HighLowTempCelcius
 	public int Low { get; init; }
 }
 
-// Converter Override Order:
+//Adding a Custom Property Naming Policy
+public class LowerCaseNamingPolicy : JsonNamingPolicy
+{
+	public override string ConvertName(string name) => name.ToLower();
+}
+
+// Dictionay Key Policy
+public class UpperCaseNamingPolicy : JsonNamingPolicy
+{
+	public override string ConvertName(string name) => name.ToUpper();
+}
+
 // [JsonConverter] applied to a property.
 // A converter added to the Converters collection.
 // [JsonConverter] applied to a custom value type or POCO.
@@ -229,9 +228,13 @@ public class TemperatureConverter : JsonConverter<Temperature>
 	public override Temperature Read(
 		ref Utf8JsonReader reader,
 		Type typeToConvert,
-		JsonSerializerOptions options) => 
-			Temperature.Parse(reader.GetString());
-
+		JsonSerializerOptions options)
+	{
+		Utf8JsonReader readerClone = reader;
+		reader = readerClone;
+		return Temperature.Parse(readerClone.GetString());
+	}
+	
 	public override void Write(
 		Utf8JsonWriter writer,
 		Temperature temperature,
@@ -244,11 +247,18 @@ public class DateTimeOnlyDateConverter_Turkey : JsonConverter<DateTime>
 	public override DateTime 
 		Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 	{
+		// struct can be assigned by assignment
+		Utf8JsonReader readerClone = reader;
+		
 		CultureInfo culture = new CultureInfo("tr-TR");
+
+		if (typeToConvert == typeof(DateTime))
+		{
+			reader = readerClone;
+			return DateTime.Parse(readerClone.GetString(), culture);
+		}
 		
-		if(typeToConvert == typeof(DateTime))
-			return DateTime.Parse(reader.GetString(),culture);
-		
+		reader = readerClone;
 		return new DateTime();
 	}
 
@@ -270,36 +280,40 @@ public class RoundFractionConverter : JsonConverter<Dictionary<string, double>>
 		Read(ref Utf8JsonReader reader, 
 			Type typeToConvert, JsonSerializerOptions options)
 	{
-		if (reader.TokenType != JsonTokenType.StartObject)
+		Utf8JsonReader readerClone = reader;
+		
+		if (readerClone.TokenType != JsonTokenType.StartObject)
 		{
-			throw new JsonException($"JsonTokenType was of type {reader.TokenType}, only objects are supported");
+			throw new JsonException($"JsonTokenType was of type {readerClone.TokenType}, only objects are supported");
 		}
 
 		var dictionary = new Dictionary<string, double>();
 		
-		while (reader.Read())
+		while (readerClone.Read())
 		{
-			if (reader.TokenType == JsonTokenType.EndObject)
+			if (readerClone.TokenType == JsonTokenType.EndObject)
 			{
+				reader = readerClone;
 				return dictionary;
 			}
 
-			if (reader.TokenType != JsonTokenType.PropertyName)
+			if (readerClone.TokenType != JsonTokenType.PropertyName)
 			{
 				throw new JsonException("JsonTokenType was not PropertyName");
 			}
 
-			var propertyName = reader.GetString();
+			var propertyName = readerClone.GetString();
 
 			if (string.IsNullOrWhiteSpace(propertyName))
 			{
 				throw new JsonException("Failed to get property name");
 			}
 
-			reader.Read();
-			dictionary.Add(propertyName, GetRoundDictValue(ref reader, options));
+			readerClone.Read();
+			dictionary.Add(propertyName, GetRoundDictValue(ref readerClone, options));
 		}
-
+		
+		reader = readerClone;
 		return dictionary;
 	}
 
@@ -311,16 +325,17 @@ public class RoundFractionConverter : JsonConverter<Dictionary<string, double>>
 			writer.WriteNumber("Max",Math.Round(value["Max"],2));
 			writer.WriteNumber("Min",Math.Round(value["Min"],2));
 		writer.WriteEndObject();
-		writer.Flush();
+		
 	}
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	private double 
 		GetRoundDictValue(ref Utf8JsonReader reader, JsonSerializerOptions options)
 	{
-		if(reader.TokenType == JsonTokenType.Number)
+		Utf8JsonReader readerClone = reader;
+		
+		if(readerClone.TokenType == JsonTokenType.Number)
 		{
-			double value = reader.GetDouble();
+			double value = readerClone.GetDouble();
 			return Math.Round(value,2);
 		}
 		
@@ -334,36 +349,41 @@ public class DictionaryStringObjectJsonConverter : JsonConverter<Dictionary<stri
 		Read(ref Utf8JsonReader reader, 
 			Type typeToConvert, JsonSerializerOptions options)
 	{
-		if (reader.TokenType != JsonTokenType.StartObject)
+		
+		Utf8JsonReader readerClone = reader;
+		
+		if (readerClone.TokenType != JsonTokenType.StartObject)
 		{
-			throw new JsonException($"JsonTokenType was of type {reader.TokenType}, only objects are supported");
+			throw new JsonException($"JsonTokenType was of type {readerClone.TokenType}, only objects are supported");
 		}
 
 		var dictionary = new Dictionary<string, object>();
 		
-		while (reader.Read())
+		while (readerClone.Read())
 		{
-			if (reader.TokenType == JsonTokenType.EndObject)
+			if (readerClone.TokenType == JsonTokenType.EndObject)
 			{
+				reader = readerClone;
 				return dictionary;
 			}
 
-			if (reader.TokenType != JsonTokenType.PropertyName)
+			if (readerClone.TokenType != JsonTokenType.PropertyName)
 			{
 				throw new JsonException("JsonTokenType was not PropertyName");
 			}
 
-			var propertyName = reader.GetString();
+			var propertyName = readerClone.GetString();
 
 			if (string.IsNullOrWhiteSpace(propertyName))
 			{
 				throw new JsonException("Failed to get property name");
 			}
 
-			reader.Read();
-			dictionary.Add(propertyName, ExtractValue(ref reader, options));
+			readerClone.Read();
+			dictionary.Add(propertyName, ExtractValue(ref readerClone, options));
 		}
-
+		
+		reader = readerClone;
 		return dictionary;
 	}
 
@@ -439,14 +459,16 @@ public class DictionaryStringObjectJsonConverter : JsonConverter<Dictionary<stri
 
 	private object ExtractValue(ref Utf8JsonReader reader, JsonSerializerOptions options)
 	{
-		switch (reader.TokenType)
+		Utf8JsonReader readerClone = reader;
+		
+		switch (readerClone.TokenType)
 		{
 			case JsonTokenType.String:
 			
-				if (reader.TryGetDateTime(out var date))
+				if (readerClone.TryGetDateTime(out var date))
 					return date;
 				
-				return reader.GetString();
+				return readerClone.GetString();
 				
 			case JsonTokenType.False:
 				return false;
@@ -456,27 +478,26 @@ public class DictionaryStringObjectJsonConverter : JsonConverter<Dictionary<stri
 				return null;
 			case JsonTokenType.Number:
 			
-				if (reader.TryGetInt64(out var result))
+				if (readerClone.TryGetInt64(out var result))
 					return result;
 				
-				return reader.GetDecimal();
+				return readerClone.GetDecimal();
 				
 			case JsonTokenType.StartObject:
-				return Read(ref reader, null, options);
+				return Read(ref readerClone, null, options);
 			case JsonTokenType.StartArray:
 			
 				var list = new List<object>();
-				while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
-					list.Add(ExtractValue(ref reader, options));
+				while (readerClone.Read() && readerClone.TokenType != JsonTokenType.EndArray)
+					list.Add(ExtractValue(ref readerClone, options));
 				
 				return list;
 				
 			default:
-				throw new JsonException($"'{reader.TokenType}' is not supported");
+				throw new JsonException($"'{readerClone.TokenType}' is not supported");
 		}
 	}
 }
-
 
 
 
