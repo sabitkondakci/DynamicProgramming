@@ -1,7 +1,3 @@
-using System.Text.Json;
-using System.Text.Encodings.Web;
-using System.Net.Http.Json;
-
 async Task Main()
 {
 	var store = new WareHouse()
@@ -228,12 +224,9 @@ public class TemperatureConverter : JsonConverter<Temperature>
 	public override Temperature Read(
 		ref Utf8JsonReader reader,
 		Type typeToConvert,
-		JsonSerializerOptions options)
-	{
-		Utf8JsonReader readerClone = reader;
-		reader = readerClone;
-		return Temperature.Parse(readerClone.GetString());
-	}
+		JsonSerializerOptions options) =>
+			Temperature.Parse(reader.GetString());
+	
 	
 	public override void Write(
 		Utf8JsonWriter writer,
@@ -248,17 +241,14 @@ public class DateTimeOnlyDateConverter_Turkey : JsonConverter<DateTime>
 		Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 	{
 		// struct can be assigned by assignment
-		Utf8JsonReader readerClone = reader;
 		
 		CultureInfo culture = new CultureInfo("tr-TR");
 
 		if (typeToConvert == typeof(DateTime))
 		{
-			reader = readerClone;
-			return DateTime.Parse(readerClone.GetString(), culture);
+			return DateTime.Parse(reader.GetString(), culture);
 		}
-		
-		reader = readerClone;
+	
 		return new DateTime();
 	}
 
@@ -280,40 +270,37 @@ public class RoundFractionConverter : JsonConverter<Dictionary<string, double>>
 		Read(ref Utf8JsonReader reader, 
 			Type typeToConvert, JsonSerializerOptions options)
 	{
-		Utf8JsonReader readerClone = reader;
 		
-		if (readerClone.TokenType != JsonTokenType.StartObject)
+		if (reader.TokenType != JsonTokenType.StartObject)
 		{
-			throw new JsonException($"JsonTokenType was of type {readerClone.TokenType}, only objects are supported");
+			throw new JsonException($"JsonTokenType was of type {reader.TokenType}, only objects are supported");
 		}
 
 		var dictionary = new Dictionary<string, double>();
 		
-		while (readerClone.Read())
+		while (reader.Read())
 		{
-			if (readerClone.TokenType == JsonTokenType.EndObject)
+			if (reader.TokenType == JsonTokenType.EndObject)
 			{
-				reader = readerClone;
 				return dictionary;
 			}
 
-			if (readerClone.TokenType != JsonTokenType.PropertyName)
+			if (reader.TokenType != JsonTokenType.PropertyName)
 			{
 				throw new JsonException("JsonTokenType was not PropertyName");
 			}
 
-			var propertyName = readerClone.GetString();
+			var propertyName = reader.GetString();
 
 			if (string.IsNullOrWhiteSpace(propertyName))
 			{
 				throw new JsonException("Failed to get property name");
 			}
 
-			readerClone.Read();
-			dictionary.Add(propertyName, GetRoundDictValue(ref readerClone, options));
+			reader.Read();
+			dictionary.Add(propertyName, GetRoundDictValue(ref reader, options));
 		}
 		
-		reader = readerClone;
 		return dictionary;
 	}
 
@@ -350,40 +337,36 @@ public class DictionaryStringObjectJsonConverter : JsonConverter<Dictionary<stri
 			Type typeToConvert, JsonSerializerOptions options)
 	{
 		
-		Utf8JsonReader readerClone = reader;
-		
-		if (readerClone.TokenType != JsonTokenType.StartObject)
+		if (reader.TokenType != JsonTokenType.StartObject)
 		{
-			throw new JsonException($"JsonTokenType was of type {readerClone.TokenType}, only objects are supported");
+			throw new JsonException($"JsonTokenType was of type {reader.TokenType}, only objects are supported");
 		}
 
 		var dictionary = new Dictionary<string, object>();
 		
-		while (readerClone.Read())
+		while (reader.Read())
 		{
-			if (readerClone.TokenType == JsonTokenType.EndObject)
+			if (reader.TokenType == JsonTokenType.EndObject)
 			{
-				reader = readerClone;
 				return dictionary;
 			}
 
-			if (readerClone.TokenType != JsonTokenType.PropertyName)
+			if (reader.TokenType != JsonTokenType.PropertyName)
 			{
 				throw new JsonException("JsonTokenType was not PropertyName");
 			}
 
-			var propertyName = readerClone.GetString();
+			var propertyName = reader.GetString();
 
 			if (string.IsNullOrWhiteSpace(propertyName))
 			{
 				throw new JsonException("Failed to get property name");
 			}
 
-			readerClone.Read();
-			dictionary.Add(propertyName, ExtractValue(ref readerClone, options));
+			reader.Read();
+			dictionary.Add(propertyName, ExtractValue(ref reader, options));
 		}
 		
-		reader = readerClone;
 		return dictionary;
 	}
 
@@ -490,14 +473,15 @@ public class DictionaryStringObjectJsonConverter : JsonConverter<Dictionary<stri
 				var list = new List<object>();
 				while (readerClone.Read() && readerClone.TokenType != JsonTokenType.EndArray)
 					list.Add(ExtractValue(ref readerClone, options));
-				
+
 				return list;
-				
+
 			default:
 				throw new JsonException($"'{readerClone.TokenType}' is not supported");
 		}
 	}
 }
+
 
 
 
