@@ -40,6 +40,8 @@ for (int i = 2000; i < 2025; i++)
 
 
     var filter_users = all_users.Split(",");
+    
+    // creation of "users/{username}" list
     var username_list =
         filter_users.Where(x =>
         {
