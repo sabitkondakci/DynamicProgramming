@@ -8,8 +8,8 @@ async IAsyncEnumerable<string> GetInfoAsync(string[] users)
     {
         for (int i = 0; i < users.Length; i++)
         {
-            var userHandler = users[i];
-            yield return await Task.FromResult(userHandler);
+            var user = users[i];
+            yield return await Task.FromResult(user);
         }
     }
 }
