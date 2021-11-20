@@ -53,7 +53,7 @@ for (int i = 2000; i < 2025; i++)
                 return false;
         }).
         Select(l => "users/" + l.Substring(l.IndexOf(":") + 1).
-       Replace("\"", String.Empty)).ToArray();
+        Replace("\"", String.Empty)).ToArray();
 
     var userAsync = GetInfoAsync(username_list);
 
