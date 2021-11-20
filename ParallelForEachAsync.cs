@@ -78,11 +78,11 @@ async Task RunTasksParallelAsync(CancellationToken cancellationToken = default)
         var userAsync = GetInfoAsync(username_list, cancellationToken);
 
         await Parallel.
-            ForEachAsync(userAsync, prlOptions, async (uri, cancellationToken) =>
+            ForEachAsync(userAsync, prlOptions, async (uri, token) =>
             {
 
                 var user =
-                     await httpClient.GetFromJsonAsync<GithubAccount>(uri, cancellationToken);
+                     await httpClient.GetFromJsonAsync<GithubAccount>(uri, token);
 
                 Console.WriteLine(
                 $"Name: {user?.Name}\n" +
