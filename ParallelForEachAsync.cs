@@ -32,8 +32,7 @@ ParallelOptions prlOptions = new()
 for (int i = 2000; i < 2025; i++)
 {
     string uri = $"https://api.github.com/users?since={i}";
-    var all_users =
-        await httpClient.GetStringAsync(uri);
+    var all_users = await httpClient.GetStringAsync(uri);
 
 
     var filter_users = all_users.Split(",");
@@ -54,12 +53,10 @@ for (int i = 2000; i < 2025; i++)
 
     var userAsync = GetInfoAsync(username_list);
 
-    await Parallel.
-        ForEachAsync(userAsync, prlOptions, async (uri, token) =>
+    await Parallel.ForEachAsync(userAsync, prlOptions, async (uri, token) =>
    {
-        var user =
-            await httpClient.GetFromJsonAsync<GithubAccount>(uri, token);
-
+        var user =await httpClient.GetFromJsonAsync<GithubAccount>(uri, token);
+       
         Console.WriteLine(
             $"Name: {user?.Name}\n" +
             $"Bio: {user?.Bio}\n" +
