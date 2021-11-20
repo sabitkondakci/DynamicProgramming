@@ -62,6 +62,7 @@
 - [Parallel Aggregation Technique](https://github.com/SabitKondakci/DynamicProgramming/blob/main/ParallelAggregation.cs)
 - [Parallel Factorial Calculation](https://github.com/SabitKondakci/DynamicProgramming/blob/main/ParallelFactorialCalc.cs)
 - [Parallel Letter Frequency](https://github.com/SabitKondakci/DynamicProgramming/blob/main/ParallelLetterFrequency.cs)
+  [Parallel Foreach Async, OAuth Token](https://github.com/SabitKondakci/DynamicProgramming/blob/main/ParallelForEachAsync.cs)
 - [Parallel Prime Numbers](https://github.com/SabitKondakci/DynamicProgramming/blob/main/ParallelPrimeNumbers.cs)
 - [Pointer Chunk](https://github.com/SabitKondakci/DynamicProgramming/blob/main/PointerChunk.cs)
 - [Rabin & Karp String Matching](https://github.com/SabitKondakci/DynamicProgramming/blob/main/RabinKarpStringMatchingHashTechnique.cs)
