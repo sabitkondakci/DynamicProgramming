@@ -48,7 +48,7 @@ for (int i = 2000; i < 2025; i++)
             int index = x.IndexOf("login");
 
             if (index != -1)
-                return x.Substring(x.IndexOf("login"), 5) == "login";
+                return x.Substring(index, 5) == "login";
             else
                 return false;
         }).
