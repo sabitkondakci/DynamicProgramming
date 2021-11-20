@@ -1,12 +1,15 @@
+using System.Runtime.CompilerServices;
 
-async IAsyncEnumerable<string> GetInfoAsync(string[] users)
+async IAsyncEnumerable<string> GetInfoAsync(string[] users,
+    [EnumeratorCancellation]CancellationToken cancellationToken = default)
 {
     if (users is not null)
     {
         for (int i = 0; i < users.Length; i++)
         {
-            var user = users[i];
-            yield return await Task.FromResult(user);
+            var userHandler = users[i];
+            if(!cancellationToken.IsCancellationRequested)
+                yield return await Task.FromResult(userHandler);
         }
     }
 }
