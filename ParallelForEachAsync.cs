@@ -54,7 +54,7 @@ async Task RunTasksParallelAsync(CancellationToken cancellationToken = default)
 {
     for (int i = 2000; i < 2025; i++)
     {
-        string uri = $"https://api.github.com/users?since={i}";
+        string uri = $"https://api.github.com/users?since={i}&per_page=100";
         var all_users =
             await httpClient.GetStringAsync(uri,cancellationToken);
 
