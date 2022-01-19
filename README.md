@@ -70,6 +70,7 @@
 - [Record Overriding Equals](https://github.com/SabitKondakci/DynamicProgramming/blob/main/RecordOverrideEquals.cs)
 - [Shallow & Deep Copy](https://github.com/SabitKondakci/DynamicProgramming/blob/main/ShallowAndDeepCopy.cs)
 - [Subset Sum Max](https://github.com/SabitKondakci/DynamicProgramming/blob/main/SubsetSumMax.cs)
+- [Tail Recursion](https://github.com/SabitKondakci/DynamicProgramming/blob/main/TailRecursion.cs)
 - [Travelling Salesman](https://github.com/SabitKondakci/DynamicProgramming/blob/main/TravellingSalesmanAlgorithm.cs)
 - [Value Equality , Class -> Record Implementation](https://github.com/SabitKondakci/DynamicProgramming/blob/main/ValueEqualityImplementation.cs)
 - [ValueTask Benchmark -1_000_000 call-](https://github.com/SabitKondakci/DynamicProgramming/blob/main/ValueTaskBenchmark.cs)
