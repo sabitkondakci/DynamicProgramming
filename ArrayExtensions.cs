@@ -49,7 +49,7 @@ public static class ArrayExtensions
 		return array;
 	}
 	
-	public static int[] Map(this int[] array, Func<int,int> func, int startIndex )
+	public static int[] Map(this int[] array, Func<int,int> func, int startIndex = 0)
 	{
 		foreach (ref int item in array.AsSpan(startIndex))
 			item = func(item);
@@ -57,7 +57,7 @@ public static class ArrayExtensions
 		return array;
 	}
 
-	public static int[] MapAndCopy(this int[] array, Func<int, int> func, int startIndex)
+	public static int[] MapAndCopy(this int[] array, Func<int, int> func, int startIndex = 0)
 	{
 		var tempArray = array.ToArray();
 		foreach (ref int item in tempArray.AsSpan(startIndex))
