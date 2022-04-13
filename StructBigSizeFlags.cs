@@ -1,7 +1,7 @@
 // LinqPad 6 evnironment
 // MSDN : https://docs.microsoft.com/en-us/dotnet/csharp/write-safe-efficient-code#use-ref-readonly-return-statements
 
-// create a global variable for SystemIOFlags, this will cut the need of "recreation of same struct on stack" at each call.
+// create a global variable for SystemIOFlags, this will cut the need of "recreation of same struct on stack" on each call.
 private static readonly SystemIOFlags originValue = SystemIOFlags.RefOriginFlags;
 
 public void Main()
