@@ -70,6 +70,7 @@
 - [Record Protected Constructor](https://github.com/SabitKondakci/DynamicProgramming/blob/main/RecordCalculatedProperty.cs)
 - [Record Overriding Equals](https://github.com/SabitKondakci/DynamicProgramming/blob/main/RecordOverrideEquals.cs)
 - [Shallow & Deep Copy](https://github.com/SabitKondakci/DynamicProgramming/blob/main/ShallowAndDeepCopy.cs)
+- [Struct Big Size Flags](https://github.com/sabitkondakci/DynamicProgramming/blob/main/StructBigSizeFlags.cs)
 - [Subset Sum Max](https://github.com/SabitKondakci/DynamicProgramming/blob/main/SubsetSumMax.cs)
 - [Tail Recursion](https://github.com/SabitKondakci/DynamicProgramming/blob/main/TailRecursion.cs)
 - [Travelling Salesman](https://github.com/SabitKondakci/DynamicProgramming/blob/main/TravellingSalesmanAlgorithm.cs)
