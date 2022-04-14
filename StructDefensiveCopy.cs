@@ -10,7 +10,7 @@ class Program
 
 public struct MutableStructReadonlyGet
 {
-	// readonly get : prevent defensive copy as creating struct instances
+	// readonly get : prevent defensive copy on creating struct instances
 	public double X { readonly get => x; set => x = value; }
 	public double Y { readonly get => y; set => y = value; }
 	public double Z { readonly get => z; set => z = value; }
