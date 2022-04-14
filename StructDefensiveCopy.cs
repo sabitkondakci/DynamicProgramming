@@ -56,13 +56,13 @@ public class Benchmarks
 	}
 
 	[Benchmark]
-	public double MutableReadOnlyAddByNoCopy()
+	public double MutableReadOnlyAddByDefensiveCopy()
 	{
 		return add_by_type(mutableStructWithReadonlyGet);
 	}
 
 	[Benchmark]
-	public double MutableReadonlyAddByDefensiveCopy()
+	public double MutableReadonlyAddByNoCopy()
 	{
 		return add_by_in(in mutableStructWithReadonlyGet);
 	}
@@ -77,7 +77,7 @@ public class Benchmarks
 	}
 }
 
-//|                      Method |      Mean |     Error |    StdDev |    Median |
-//| --------------------------- | ---------:| ---------:| ---------:| ---------:|
-//| MutableReadOnlyAddByType    | 7.6793 ns | 0.0799 ns | 0.0747 ns | 7.7027 ns |
-//| MutableReadonlyAddByRefType | 0.0039 ns | 0.0130 ns | 0.0115 ns | 0.0000 ns |
+//|                               Method |      Mean |     Error |    StdDev |    Median |
+//| ------------------------------------ | ---------:| ---------:| ---------:| ---------:|
+//| MutableReadOnlyAddByDefensiveCopy    | 7.6793 ns | 0.0799 ns | 0.0747 ns | 7.7027 ns |
+//| MutableReadonlyAddByNoCopy           | 0.0039 ns | 0.0130 ns | 0.0115 ns | 0.0000 ns |
