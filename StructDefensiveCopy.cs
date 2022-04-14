@@ -10,6 +10,7 @@ class Program
 
 public struct MutableStructReadonlyGet
 {
+	// readonly get : prevent defensive copy as creating struct instances
 	public double X { readonly get => x; set => x = value; }
 	public double Y { readonly get => y; set => y = value; }
 	public double Z { readonly get => z; set => z = value; }
@@ -71,6 +72,8 @@ public class Benchmarks
 	{
 		return s.X + s.Y;
 	}
+	
+	// in : prevent defesive copy on method calls
 	public double add_by_in(in MutableStructReadonlyGet s)
 	{
 		return s.X + s.Y;
