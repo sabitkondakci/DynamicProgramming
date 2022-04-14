@@ -17,7 +17,8 @@ public struct MutableStructReadonlyGet
 	private double z;
 	private double y;
 	private double x;
-
+	
+	// mocking a big struct by adding dummy parameters
 	private double a;
 	private double b;
 	private double c;
