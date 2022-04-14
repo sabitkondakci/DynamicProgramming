@@ -81,3 +81,10 @@ public class Benchmarks
 //| ------------------------------------ | ---------:| ---------:| ---------:| ---------:|
 //| MutableReadOnlyAddByDefensiveCopy    | 7.6793 ns | 0.0799 ns | 0.0747 ns | 7.7027 ns |
 //| MutableReadonlyAddByNoCopy           | 0.0039 ns | 0.0130 ns | 0.0115 ns | 0.0000 ns |
+
+
+*/ 
+BenchmarkDotNet=v0.13.1, OS=Windows 10.0.19044.1586 (21H2)
+Intel Core i5-3210M CPU 2.50GHz (Ivy Bridge), 1 CPU, 4 logical and 2 physical cores .NET SDK=6.0.200 
+[Host] : .NET 5.0.15 (5.0.1522.11506), X64 RyuJIT 
+*/
