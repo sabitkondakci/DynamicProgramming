@@ -37,10 +37,7 @@ public class ToolComparer : IEqualityComparer<Tool>
 	public bool Equals(Tool x, Tool y)
 	{
 		if(ReferenceEquals(x,y))
-			return true;
-		
-		if(x is null || y is null)
-			return false;
+			return true;	
 		
 		return
 			x.Name == y.Name &&
