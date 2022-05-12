@@ -1,3 +1,5 @@
+// LinqPad Environment
+
 void Main()
 {
 	var itemList = new List<Tool>()
