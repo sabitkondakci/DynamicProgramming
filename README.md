@@ -52,6 +52,7 @@
 - [Kestrel WebHostBuilder HTTP/2 Setting](https://github.com/SabitKondakci/DynamicProgramming/blob/main/KestrelWebHostBuilder.cs)
 - [Knapsack](https://github.com/SabitKondakci/DynamicProgramming/blob/main/KnapsackAlgorithm.cs)
 - [Knuth - Morris - Prat ](https://github.com/SabitKondakci/DynamicProgramming/blob/main/KnuthMorrisPratAlgorithm.cs)
+- [LINQ Equality Comparer](https://github.com/sabitkondakci/DynamicProgramming/blob/main/LINQEqualityComparer.cs)
 - [Lazy Fibonacci List](https://github.com/sabitkondakci/DynamicProgramming/blob/main/LazyFibonacciList.cs)
 - [Longest Common Subsequence](https://github.com/SabitKondakci/DynamicProgramming/blob/main/LongestCommonSubsequence.cs)
 - [Magic Square - Odd Size](https://github.com/SabitKondakci/DynamicProgramming/blob/main/MagicSquareForOddSizes.cs)
