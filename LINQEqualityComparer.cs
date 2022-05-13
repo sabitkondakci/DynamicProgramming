@@ -47,6 +47,6 @@ public class ToolComparer : IEqualityComparer<Tool>
 		if(obj is null)
 			return -1;
 		
-		return (obj.ID).GetHashCode();
+		return obj.ID;
 	}
 }
