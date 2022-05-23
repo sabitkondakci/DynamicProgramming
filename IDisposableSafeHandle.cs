@@ -16,7 +16,7 @@ public class SafeUnmanagedClass : SafeHandle
 {
 	public SafeUnmanagedClass() : base(IntPtr.Zero,false){	}
 	public override bool IsInvalid => false;
-	protected override bool ReleaseHandle() => ReleaseHandle();
+	protected override bool ReleaseHandle() => base.ReleaseHandle();
 }
 
 public class DownloadWebsiteContent : IDisposable
@@ -47,7 +47,6 @@ public class DownloadWebsiteContent : IDisposable
 	public void Dispose()
 	{
 		Dispose(true); // true : release managed and unmanaged objects.
-		GC.SuppressFinalize(this); // objects are already released.
 	}
 	
 	protected virtual void Dispose ( bool disposeManagedObjects)
@@ -67,6 +66,7 @@ public class DownloadWebsiteContent : IDisposable
 		// if there's a base class that also impements IDisposable
 		// base.Dispose(disposeManagedObjects);
 	}
-
+	
+	// SafeHandle is recommended!
 	~DownloadWebsiteContent() { Dispose(false);} // false : release unmanaged objects
 }
