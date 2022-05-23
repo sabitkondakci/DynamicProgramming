@@ -71,6 +71,7 @@
 - [Rabin & Karp String Matching](https://github.com/SabitKondakci/DynamicProgramming/blob/main/RabinKarpStringMatchingHashTechnique.cs)
 - [Record Protected Constructor](https://github.com/SabitKondakci/DynamicProgramming/blob/main/RecordCalculatedProperty.cs)
 - [Record Overriding Equals](https://github.com/SabitKondakci/DynamicProgramming/blob/main/RecordOverrideEquals.cs)
+- [SafeHandle Example](https://github.com/sabitkondakci/DynamicProgramming/blob/main/SafeHandleExample.cs)
 - [Shallow & Deep Copy](https://github.com/SabitKondakci/DynamicProgramming/blob/main/ShallowAndDeepCopy.cs)
 - [Struct Big Size Flags](https://github.com/sabitkondakci/DynamicProgramming/blob/main/StructBigSizeFlags.cs)
 - [Struct Defensive Copy](https://github.com/sabitkondakci/DynamicProgramming/blob/main/StructDefensiveCopy.cs)
