@@ -10,7 +10,6 @@ void Main()
 	var immutableModelCopy = model?.With(m => { });
 
 	immutableModelCopy.Dump("immutableModelCopy");
-	model.Dump();
 }
 
 public class Model : ICloneable
