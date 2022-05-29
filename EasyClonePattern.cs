@@ -6,7 +6,7 @@ void Main()
 	
 	model.Dump("model");
 
-	var easyClone = model.With(x => { x.Date = DateTime.Today; });
+	var easyClone = model.CloneWith(x => { x.Date = DateTime.Today; });
 	
 	easyClone.Dump("easyClone");
 }
@@ -35,7 +35,7 @@ public class Model : ICloneable
 
 public static class CloneHelper
 {
-	public static T With<T>(this T model, Action<T> action)
+	public static T CloneWith<T>(this T model, Action<T> action = default)
 		where T : ICloneable
 	{
 		var tempT = (T)model?.Clone();
