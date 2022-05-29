@@ -2,27 +2,30 @@
 
 void Main()
 {
-	var model = new Model { Date = DateTime.Now, Id = 1, Name = "Joe" };
+	var model = new Model { Date = DateTime.Now, Name = "Joe" };
 	
 	model.Dump("model");
-	
-	// model might be null! 
-	var immutableModelCopy = model?.With(m => { });
 
+	var immutableModelCopy = model.With(m => new Model(m)
+	{
+		Name = "Sabit",
+		Id = 43
+	});
+	
 	immutableModelCopy.Dump("immutableModelCopy");
 }
 
 public class Model : ICloneable
 {
-	public string Name { get; set; }
-	public DateTime Date { get; set; }
+	public string Name { get; init; }
+	public DateTime Date { get; init; }
 
-	public int Id { get; set; }
-	public int[] RefTest { get; set; }
+	public int Id { get; init; }
+	public int[] RefTest { get; init; }
 
-	public Model() => RefTest = new int[2];
+	public Model() { }
 
-	private Model(Model model)
+	public Model(Model model)
 	{
 		Name = model.Name;
 		Date = model.Date;
@@ -36,14 +39,13 @@ public class Model : ICloneable
 
 public static class ImmutableHelper
 {
-	public static T With<T>(this T model, Action<T> action)
+	public static T With<T>(this T model, Func<T, T> action)
 		where T : ICloneable
 	{
-		var tempT = (T) model.Clone();
-		
-		// handle model != null by model?.With()
-		if (action != null)
-			action(tempT);
+		var tempT = (T)model?.Clone();
+
+		if (tempT != null && action != null)
+			tempT = action(tempT);
 
 		return tempT;
 	}
